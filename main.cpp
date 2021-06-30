@@ -1,11 +1,13 @@
-#include "mainwindow.h"
+#include "rsxffile.h"
+#include "drawfunctions.hpp"
+#include <iostream>
 
-#include <QApplication>
-
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    return a.exec();
+int main() {
+    setlocale(LC_ALL, "Russian");
+    const char* FNAME = "M3833.SXF";
+    nSXFFile::rSXFFile file;
+    file.Read(FNAME);
+    file.Print();
+    nDraw::Draw(file);
+    return 0;
 }
