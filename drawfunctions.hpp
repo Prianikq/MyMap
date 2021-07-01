@@ -36,7 +36,7 @@ namespace nDraw {
                 }
             }
             else {
-
+                // Обработка трёхмерных координат (в рабочей карте нет)
             }
         }
         return result;
@@ -45,7 +45,7 @@ namespace nDraw {
     void DrawHydrography(QPainter& painter, const nSXFFile::rSXFFile &file) {
         static const int32_t CODES_COUNT = 9;
         static const int32_t HYDROGRAPHY_CODE[CODES_COUNT] = {31110000, 31120000, 31131000, 31132000, 31133000, 31134000,
-                                               31135000, 31410000, 31431000};
+                                               31135000, 31410000, 31431000}; // Классификационные коды объектов гидрографии из классификатора
         for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
             bool find = false;
             for (int32_t j = 0; j < CODES_COUNT; ++j) {
@@ -61,13 +61,13 @@ namespace nDraw {
             painter.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
             painter.setBrush(QBrush(Qt::cyan, Qt::SolidPattern));
             short localiz_type = file.m_records[i].m_title.LocalizationType();
-            if (localiz_type == 0) {
+            if (localiz_type == nSXFFile::eLocalType::LINEAR) {
                 painter.drawPolyline(points.data(), points.size());
             }
-            else if (localiz_type == 1) {
+            else if (localiz_type == nSXFFile::eLocalType::AREAL) {
                 painter.drawPolygon(points.data(), points.size());
             }
-            else if (localiz_type == 2) {
+            else if (localiz_type == nSXFFile::eLocalType::POINT) {
                 painter.drawPoint(points[0]);
             }
             else {

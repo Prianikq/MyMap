@@ -9,10 +9,8 @@ namespace nSXFFile {
         std::cout << "\t\tИдентификатор начала записи: " << std::hex << this->m_identifier_l << std::endl;
         std::cout << "\t\tОбщая длина записи: " << std::dec << this->m_length_record_l << std::endl;
         std::cout << "\t\tДлина метрики: " << std::dec << this->m_length_metric_l << std::endl;
-        std::cout << "\t\tКлассификационный код: " << std::dec << this->m_classification_code_l << std::endl; // В ШЕСТНАДЦАТЕР??
+        std::cout << "\t\tКлассификационный код: " << std::dec << this->m_classification_code_l << std::endl;
         std::cout << "\t\tСобственный номер объекта: " << std::dec << this->m_object_number_l << std::endl;
-        /*std::cout << "\t\t\tНомер в группе: " << std::dec << this->m_object_number_a_s[0] << std::endl;
-        std::cout << "\t\t\tНомер группы: " << std::dec << this->m_object_number_a_s[1] << std::endl;*/
         std::cout << "\t\tСправочные данные: "; InformationFlagsPrint(this->m_reference_data_l);
         std::cout << "\t\tЧисло точек метрики: " << std::dec << this->m_count_metric_points << std::endl;
         std::cout << "\t\tОписатель метрики: " << std::endl;
@@ -49,7 +47,7 @@ namespace nSXFFile {
         return ((this->m_reference_data_l & METRIC_TEXT_POS) == METRIC_TEXT_POS ? true : false);
     }
     short rRecordTitle::LocalizationType() const {
-        static const int32_t LOCALIZATION_TYPE_POS = (1 << 4) - 1;
+        static const short LOCALIZATION_TYPE_POS = (1 << 4) - 1;
         return (this->m_reference_data_l & LOCALIZATION_TYPE_POS);
     }
 
@@ -77,7 +75,7 @@ namespace nSXFFile {
                 }
             }
             else {
-
+                // Обработка точек метрики в трёхмерных координатах (в рабочей карте таких нет)
             }
         }
         if (this->m_title.HasMetricText()) { // Если в метрике имеется подпись

@@ -9,7 +9,6 @@ namespace nSXFFile {
     void rSXFFile::Print() {
         this->m_passport.Print();
         this->m_descriptor.Print();
-        //this->m_records[TEST - 1].Print();
         for (int i = TEST1; i < TEST2; ++i) { // ПОМЕНЯТЬ РАЗМЕР
             if (this->m_records[i].m_title.m_object_number_l == 16777794) { // ВНИМАНИЕ!
                 std::cout << std::endl << "Информация о считанной записи №" << i + 1 << ": " << std::endl;
@@ -20,15 +19,13 @@ namespace nSXFFile {
     }
     void rSXFFile::Read(const char* p_str_filename) {
         std::ifstream in(p_str_filename, std::ios::binary);
-        /*in.read((char*)&this->m_passport.m_identifier_l, sizeof(this->m_passport.m_identifier_l));
-        std::cout << std::hex << this->m_passport.m_identifier_l << std::endl;*/
         in.read((char*)&this->m_passport, sizeof(this->m_passport));
         in.read((char*)&this->m_descriptor, sizeof(this->m_descriptor));
         this->m_records.resize(this->m_descriptor.m_number_records_l);
         for (int i = 0; i < this->m_descriptor.m_number_records_l; ++i) { // ПОМЕНЯТЬ РАЗМЕР
             in.read((char*)&this->m_records[i].m_title, sizeof(this->m_records[i].m_title));
             this->m_records[i].m_title.m_count_metric_points = this->m_records[i].m_title.m_metric_descriptor_a_s[1]; // Перенести значение в основное поле (см. структуру заголовка)
-            long s_sz = 0;
+            int32_t s_sz = 0;
             /*Считывание метрики записи */
             if (!this->m_records[i].m_title.Has3DPresentation()) {
                 if (!this->m_records[i].m_title.HasDoubleMetricType() && !this->m_records[i].m_title.HasBigMetricSize()) {
@@ -62,7 +59,7 @@ namespace nSXFFile {
 
             /*Считывание подобъектов (если имеются) */
             if (this->m_records[i].m_title.m_metric_descriptor_a_s[0] != 0) {
-                long l_length_ost = m_records[i].m_title.m_length_metric_l - s_sz * this->m_records[i].m_title.m_count_metric_points; // ВНИМАНИЕ! СЧИТЫВАЕТ ГРАФИЧЕСКОЕ ОПИСАНИЕ ОБЪЕКТА ТУДА ЖЕ
+                int32_t l_length_ost = m_records[i].m_title.m_length_metric_l - s_sz * this->m_records[i].m_title.m_count_metric_points; // ВНИМАНИЕ! СЧИТЫВАЕТ ГРАФИЧЕСКОЕ ОПИСАНИЕ ОБЪЕКТА ТУДА ЖЕ
                 this->m_records[i].m_subobjects = new char[l_length_ost];
                 in.read(this->m_records[i].m_subobjects, l_length_ost);
             }

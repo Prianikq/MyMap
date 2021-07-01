@@ -19,7 +19,9 @@ namespace nSXFFile {
     struct rGeo_coord {
         double m_b_d;
         double m_l_d;
-        void Print();
+        void Print() {
+            std::cout << "B = " << this->m_b_d << "   L = " << this->m_l_d << std::endl;
+        }
     };
 
 

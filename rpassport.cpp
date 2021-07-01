@@ -2,11 +2,7 @@
 #include "rpassport.h"
 #include <iostream>
 
-
 namespace nSXFFile {
-    void rGeo_coord::Print() {
-        std::cout << "B = " << this->m_b_d << "   L = " << this->m_l_d << std::endl;
-    }
     void rPassport::Print() {
         std::cout << "Паспортные данные файла: " << std::endl;
         std::cout << "\tИдентификатор начала файла: " << std::hex << this->m_identifier_l << std::endl;

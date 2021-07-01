@@ -3,6 +3,7 @@
 #include "rpassport.h"
 #include "rrecord.h"
 #include <vector>
+
 namespace nSXFFile {
     struct rSXFFile {
         rPassport m_passport;
