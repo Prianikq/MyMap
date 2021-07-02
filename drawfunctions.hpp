@@ -5,13 +5,20 @@
 
 namespace nDraw {
     QPoint coords_orig_g; // Условные координаты левого верхнего угла окна
+    double METERS_DESCRETE_X_D; // Определяет значение, сколько метров содержится в 1 дискрете (по X и Y координате отдельно)
+    double METERS_DESCRETE_Y_D;
+    double PIXEL_METERS_D; // Определяет значение, сколько метров в 1 пикселе
     template<class T>
     QPointF FromMapPointToWindowPointF(const T& coords_input) {
-        QPointF result(1.0*(coords_input.y() - coords_orig_g.y()), 1.0*(coords_orig_g.x() - coords_input.x()));
+        double x = (1.0*coords_orig_g.x() - coords_input.x()) * METERS_DESCRETE_X_D / PIXEL_METERS_D;
+        double y = (coords_input.y() - 1.0*coords_orig_g.y()) * METERS_DESCRETE_Y_D / PIXEL_METERS_D;
+        QPointF result(y, x);
         return result;
     }
     QPoint FromMapPointToWindowPoint(const QPoint& coords_input) { // Добавлена для создания QRegion рамки
-        QPoint result(coords_input.y() - coords_orig_g.y(), coords_orig_g.x() - coords_input.x());
+        double x = (1.0*coords_orig_g.x() - coords_input.x()) * METERS_DESCRETE_X_D / PIXEL_METERS_D;
+        double y = (coords_input.y() - 1.0*coords_orig_g.y()) * METERS_DESCRETE_Y_D / PIXEL_METERS_D;
+        QPoint result(qRound(y), qRound(x));
         return result;
     }
     QVector<QPointF> GetMetricPoints(const nSXFFile::rRecord& record) {
@@ -76,6 +83,42 @@ namespace nDraw {
         }
     }
 
+    void DrawLandRelief(QPainter& painter, const nSXFFile::rSXFFile &file) {
+        static const int32_t CODES_COUNT = 6;
+        static const int32_t LAND_RELIEF_CODE_LINEAR[CODES_COUNT] = {21100000, 21200000, 21300000, 22212000, 22221000, 22630000};
+        static const int32_t PIT_CODE = 22250000;
+        static const int32_t BARROW_CODE = 22520000;
+        static const int32_t HORIZONTALS_CODE = 21100000;
+        for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
+            if (file.m_records[i].m_title.m_classification_code_l == PIT_CODE) {
+                // Отрисовка значка
+            }
+            else if (file.m_records[i].m_title.m_classification_code_l == BARROW_CODE) {
+                // Отрисовка значка
+            }
+            else {
+                bool find = false;
+                for (int32_t j = 0; j < CODES_COUNT; ++j) {
+                    if (file.m_records[i].m_title.m_classification_code_l == LAND_RELIEF_CODE_LINEAR[j]) {
+                        find = true;
+                        break;
+                    }
+                }
+                if (!find) {
+                    continue;
+                }
+                if (file.m_records[i].m_title.m_classification_code_l == HORIZONTALS_CODE) {
+                    painter.setPen(QPen(Qt::darkYellow, 2, Qt::SolidLine));
+                }
+                else {
+                    painter.setPen(QPen(Qt::darkYellow, 1, Qt::SolidLine));
+                }
+                QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+                painter.drawPolyline(points.data(), points.size());
+            }
+        }
+    }
+
     void Draw(const nSXFFile::rSXFFile& file) {
         QPoint left_bottom(file.m_passport.m_frame_coordinates.m_southwest.m_x, file.m_passport.m_frame_coordinates.m_southwest.m_y);
         QPoint right_bottom(file.m_passport.m_frame_coordinates.m_southeast.m_x, file.m_passport.m_frame_coordinates.m_southeast.m_y);
@@ -85,11 +128,33 @@ namespace nDraw {
 
         coords_orig_g.setX(qMax(right_top.x(), left_top.x()) + OFFSET);
         coords_orig_g.setY(qMin(left_bottom.y(), left_top.y()) - OFFSET);
-        int32_t image_size_x = qMax(right_bottom.y(), right_top.y()) - qMin(left_bottom.y(), left_top.y()) + 2 * OFFSET;
-        int32_t image_size_y = qMax(right_top.x(), left_top.x()) - qMin(right_bottom.x(), left_bottom.x()) + 2 * OFFSET;
-        std::cout << image_size_x << " " << image_size_y << std::endl;
-        QImage picture(image_size_x, image_size_y, QImage::Format_RGB32);
-        picture.fill(Qt::gray);
+
+        /* Вычисление размеров выходного изображения (считая, что коордианты рамки <-> координаты углов листа) */
+        double meters_length = file.m_passport.m_rectang_coords.m_northwest.m_x - file.m_passport.m_rectang_coords.m_southwest.m_x;
+        double meters_width = file.m_passport.m_rectang_coords.m_northeast.m_y - file.m_passport.m_rectang_coords.m_northwest.m_y;
+        double discrete_length = left_top.x() - left_bottom.x();
+        double discrete_width = right_top.y() - left_top.y();
+        std::cout << "M: " << meters_length << " " << meters_width << std::endl;
+        std::cout << "D: " << discrete_length << " " << discrete_width << std::endl;
+
+        METERS_DESCRETE_X_D = meters_length/discrete_length;
+        METERS_DESCRETE_Y_D = meters_width/discrete_width;
+        std::cout << "ANS: " << METERS_DESCRETE_X_D << " " << METERS_DESCRETE_Y_D << std::endl;
+
+        double image_size_x_disc = qMax(right_bottom.y(), right_top.y()) - qMin(left_bottom.y(), left_top.y()) + 2 * OFFSET;
+        image_size_x_disc *= METERS_DESCRETE_Y_D; // Перевод из дискрет в метры
+        double image_size_y_disc = qMax(right_top.x(), left_top.x()) - qMin(right_bottom.x(), left_bottom.x()) + 2 * OFFSET;
+        image_size_y_disc *= METERS_DESCRETE_X_D;
+
+        /* Вычисление размера пикселя в метрах ( подробнее об этом тут https://help13.gisserver.ru/russian/panorama/index.html?vekbmp.html ) */
+        int32_t precision_met = /*file.m_passport.m_instrument_resolution_l*/ 5000; // Внимание! От этого значения зависит размер изображения, его можно изменять (уменьшать - меньше разрешение изображения)
+        PIXEL_METERS_D = 1.0f*(file.m_passport.m_scale_l / precision_met);
+        int32_t image_size_x_pix = qRound(image_size_x_disc / PIXEL_METERS_D);
+        int32_t image_size_y_pix = qRound(image_size_y_disc / PIXEL_METERS_D);
+        std::cout << "РАЗМЕРЫ: " << image_size_x_pix << " " << image_size_y_pix << std::endl;
+
+        QImage picture(image_size_x_pix, image_size_y_pix, QImage::Format_RGB32);
+        picture.fill(Qt::lightGray);
         QPainter painter;
         painter.begin(&picture);
         painter.setRenderHint(QPainter::Antialiasing, true);
@@ -103,7 +168,6 @@ namespace nDraw {
                 << FromMapPointToWindowPointF(right_top)
                 << FromMapPointToWindowPointF(right_bottom);
         painter.drawPolygon(frame);
-
 
         left_bottom = FromMapPointToWindowPoint(left_bottom);
         left_bottom.setX(left_bottom.x()+1);
@@ -120,6 +184,9 @@ namespace nDraw {
         painter.setClipRegion(QRegion(QPolygon() << left_bottom <<
                                       left_top << right_top <<
                                       right_bottom)); // Задание границ отрисовки (всё, что попадет за рамку отрисовано не будет)
+
+        /* Отрисовка рельеф суши */
+        DrawLandRelief(painter, file);
 
         /* Отрисовка объектов гидрографии */
         DrawHydrography(painter, file);
