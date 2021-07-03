@@ -119,6 +119,69 @@ namespace nDraw {
         }
     }
 
+    void DrawVegitationFilled(QPainter& painter, const nSXFFile::rSXFFile &file) {
+        static const int32_t CODES_COUNT_GREEN = 2;
+        static const int32_t VEGITATION_CODES_GREEN[CODES_COUNT_GREEN] = {71113000, 71211200};
+        static const int32_t CODES_COUNT_DARK_GREEN = 2;
+        static const int32_t VEGITATION_CODES_DARK_GREEN[CODES_COUNT_DARK_GREEN] = {71111110, 71123000};
+
+        for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
+            if (file.m_records[i].m_title.LocalizationType() != nSXFFile::eLocalType::AREAL) {
+                continue; // Все объекты, представленные в этом слое - площадные
+            }
+            char find = 0;
+            for (int32_t j = 0; j < CODES_COUNT_GREEN; ++j) {
+                if (file.m_records[i].m_title.m_classification_code_l == VEGITATION_CODES_GREEN[j]) {
+                    find = 1;
+                    break;
+                }
+            }
+            for (int32_t j = 0; j < CODES_COUNT_DARK_GREEN; ++j) {
+                if (file.m_records[i].m_title.m_classification_code_l == VEGITATION_CODES_DARK_GREEN[j]) {
+                    find = 2;
+                    break;
+                }
+            }
+            if (find == 0) {
+                continue;
+            }
+            else if (find == 1) {
+                painter.setPen(QPen(QColor(152, 251, 152), 1, Qt::SolidLine));
+                painter.setBrush(QBrush(QColor(152, 251, 152), Qt::SolidPattern));
+            }
+            else {
+                painter.setPen(QPen(QColor(154, 205, 50), 1, Qt::SolidLine));
+                painter.setBrush(QBrush(QColor(154, 205, 50), Qt::SolidPattern));
+            }
+            QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+            painter.drawPolygon(points.data(), points.size());
+        }
+    }
+
+    void DrawSettlements(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        static const int32_t CODES_COUNT = 4;
+        static const int32_t SETTLEMENTS_CODES[CODES_COUNT] = {41100000, 41200000, 42100000, 43100000};
+
+        for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
+            if (file.m_records[i].m_title.LocalizationType() != nSXFFile::eLocalType::AREAL) {
+                continue; // Все объекты, представленные в этом слое - площадные
+            }
+            bool find = false;
+            for (int32_t j = 0; j < CODES_COUNT; ++j) {
+                if (file.m_records[i].m_title.m_classification_code_l == SETTLEMENTS_CODES[j]) {
+                    find = true;
+                    break;
+                }
+            }
+            if (!find) {
+                continue;
+            }
+            painter.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
+            QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+            painter.drawPolyline(points.data(), points.size());
+        }
+    }
+
     void Draw(const nSXFFile::rSXFFile& file) {
         QPoint left_bottom(file.m_passport.m_frame_coordinates.m_southwest.m_x, file.m_passport.m_frame_coordinates.m_southwest.m_y);
         QPoint right_bottom(file.m_passport.m_frame_coordinates.m_southeast.m_x, file.m_passport.m_frame_coordinates.m_southeast.m_y);
@@ -185,11 +248,17 @@ namespace nDraw {
                                       left_top << right_top <<
                                       right_bottom)); // Задание границ отрисовки (всё, что попадет за рамку отрисовано не будет)
 
-        /* Отрисовка рельеф суши */
-        DrawLandRelief(painter, file);
-
         /* Отрисовка объектов гидрографии */
         DrawHydrography(painter, file);
+
+        /* Отрисовка объектов растительности с заливкой */
+        DrawVegitationFilled(painter, file);
+
+        /* Отрисовка рельефа суши */
+        DrawLandRelief(painter, file);
+
+        /* Отрисовка населенных пунктов */
+        DrawSettlements(painter, file);
 
         painter.end();
         picture.save("result.png", "PNG");
