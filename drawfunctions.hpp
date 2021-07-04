@@ -182,6 +182,30 @@ namespace nDraw {
         }
     }
 
+    void DrawVegitation(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        static const int32_t CODES_LINE_COUNT = 2;
+        static const int32_t VEGITATION_LINE_CODES[CODES_LINE_COUNT] = {71111110, 71131000}; // Массив с кодами линейных объектов (отрисовываются одинаково)
+        /* Здесь также нужно отрисовать несколько точечных объектов-значков и 2 площадных с заполнением в виде значков - это пока не реализовано */
+        for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
+            if (file.m_records[i].m_title.LocalizationType() != nSXFFile::eLocalType::LINEAR) {
+                continue; // Все объекты, представленные в этом слое - линейные
+            }
+            bool find = false;
+            for (int32_t j = 0; j < CODES_LINE_COUNT; ++j) {
+                if (file.m_records[i].m_title.m_classification_code_l == VEGITATION_LINE_CODES[j]) {
+                    find = true;
+                    break;
+                }
+            }
+            if (!find) {
+                continue;
+            }
+            painter.setPen(QPen(Qt::black, 2, Qt::DotLine));
+            QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+            painter.drawPolyline(points.data(), points.size());
+        }
+    }
+
     void Draw(const nSXFFile::rSXFFile& file) {
         QPoint left_bottom(file.m_passport.m_frame_coordinates.m_southwest.m_x, file.m_passport.m_frame_coordinates.m_southwest.m_y);
         QPoint right_bottom(file.m_passport.m_frame_coordinates.m_southeast.m_x, file.m_passport.m_frame_coordinates.m_southeast.m_y);
@@ -251,11 +275,14 @@ namespace nDraw {
         /* Отрисовка объектов гидрографии */
         DrawHydrography(painter, file);
 
-        /* Отрисовка объектов растительности с заливкой */
-        DrawVegitationFilled(painter, file);
+        /* Отрисовка растительности */
+        DrawVegitation(painter, file);
 
         /* Отрисовка рельефа суши */
         DrawLandRelief(painter, file);
+
+        /* Отрисовка объектов растительности с заливкой */
+        DrawVegitationFilled(painter, file);
 
         /* Отрисовка населенных пунктов */
         DrawSettlements(painter, file);
