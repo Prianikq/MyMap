@@ -30,5 +30,7 @@ namespace nSXFFile {
         char* m_semantics; // Считывается целиком, в данной версии программы не обрабатывается
         char* m_subobjects; // Считывается целиком, в данной версии программы не обрабатывается
         void Print();
+        rRecord();
+        ~rRecord();
     };
 }

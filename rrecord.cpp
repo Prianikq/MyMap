@@ -4,6 +4,42 @@
 #include <iostream>
 
 namespace nSXFFile {
+    rRecord::rRecord() {
+        this->m_points = nullptr;
+        this->m_str_text = nullptr;
+        this->m_semantics = nullptr;
+        this->m_subobjects = nullptr;
+    }
+    rRecord::~rRecord() {
+        if (this->m_points != nullptr) {
+            if (!this->m_title.HasDoubleMetricType() && !this->m_title.HasBigMetricSize()) {
+                rRectang_coord2D<short>* get_points = static_cast<rRectang_coord2D<short>*>(this->m_points);
+                delete[] get_points;
+            }
+            else if (this->m_title.HasDoubleMetricType() && !this->m_title.HasBigMetricSize()) {
+                rRectang_coord2D<float>* get_points = static_cast<rRectang_coord2D<float>*>(this->m_points);
+                delete[] get_points;
+            }
+            else if (!this->m_title.HasDoubleMetricType() && this->m_title.HasBigMetricSize()) {
+                rRectang_coord2D<int32_t>* get_points = static_cast<rRectang_coord2D<int32_t>*>(this->m_points);
+                delete[] get_points;
+            }
+            else {
+                rRectang_coord2D<double>* get_points = static_cast<rRectang_coord2D<double>*>(this->m_points);
+                delete[] get_points;
+            }
+        }
+        if (this->m_str_text != nullptr) {
+            delete[] this->m_str_text;
+        }
+        if (this->m_semantics != nullptr) {
+            delete[] this->m_semantics;
+        }
+        if (this->m_subobjects != nullptr) {
+            delete[] this->m_subobjects;
+        }
+    }
+
     void rRecordTitle::Print() const {
         std::cout << "\tДанные заголовка записи: " << std::endl;
         std::cout << "\t\tИдентификатор начала записи: " << std::hex << this->m_identifier_l << std::endl;

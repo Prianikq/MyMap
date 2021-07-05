@@ -65,8 +65,8 @@ namespace nDraw {
                 continue;
             }
             QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
-            painter.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
-            painter.setBrush(QBrush(Qt::cyan, Qt::SolidPattern));
+            painter.setPen(QPen(QColor(30, 144, 255), 1, Qt::SolidLine));
+            painter.setBrush(QBrush(QColor(0, 191, 255), Qt::SolidPattern));
             short localiz_type = file.m_records[i].m_title.LocalizationType();
             if (localiz_type == nSXFFile::eLocalType::LINEAR) {
                 painter.drawPolyline(points.data(), points.size());
@@ -206,6 +206,66 @@ namespace nDraw {
         }
     }
 
+    void DrawSoilsAndLavaSheets(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        static const int32_t SMOOTH_SANDS_CODE = 72255000;
+        static const int32_t SWAMPS_CODE = 72310000;
+        static const int32_t SALT_MARSHES_CODE = 72320000;
+
+        for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
+            if (file.m_records[i].m_title.LocalizationType() != nSXFFile::eLocalType::AREAL) {
+                continue; // Все объекты, представленные в этом слое - площадные
+            }
+            if (file.m_records[i].m_title.m_classification_code_l == SMOOTH_SANDS_CODE) {
+                painter.setPen(Qt::NoPen);
+                painter.setBrush(QBrush(Qt::darkYellow, Qt::Dense6Pattern));
+                QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+                painter.drawPolygon(points.data(), points.size());
+            }
+            else if (file.m_records[i].m_title.m_classification_code_l == SWAMPS_CODE) {
+                // Отрисовка не готова
+            }
+            else if (file.m_records[i].m_title.m_classification_code_l == SALT_MARSHES_CODE) {
+                // Отрисовка не готова
+            }
+        }
+    }
+
+    void DrawReliefOfHydrography(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        static const int32_t SHALLOWS_CODE = 31211000;
+        static const int32_t STEEP_BANKS_CODE = 31242000;
+        static const int32_t LINEAR_CODES_COUNT = 3;
+        static const int32_t RELIEF_HYDROGRAPHY_LINEAR_CODES[LINEAR_CODES_COUNT] = {STEEP_BANKS_CODE, 31310000, 31521000};
+
+        for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
+            if (file.m_records[i].m_title.m_classification_code_l == SHALLOWS_CODE) {
+                painter.setPen(Qt::NoPen);
+                painter.setBrush(QBrush(Qt::black, Qt::Dense6Pattern));
+                QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+                painter.drawPolygon(points.data(), points.size());
+            }
+            else {
+                bool find = false;
+                for (int j = 0; j < LINEAR_CODES_COUNT; ++j) {
+                    if (file.m_records[i].m_title.m_classification_code_l == RELIEF_HYDROGRAPHY_LINEAR_CODES[j]) {
+                        find = true;
+                        break;
+                    }
+                }
+                if (!find) {
+                    continue;
+                }
+                QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+                if (file.m_records[i].m_title.m_classification_code_l == STEEP_BANKS_CODE) {
+                    painter.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
+                }
+                else {
+                    painter.setPen(QPen(QColor(30, 144, 255), 1, Qt::SolidLine));
+                }
+                painter.drawPolyline(points.data(), points.size());
+            }
+        }
+    }
+
     void Draw(const nSXFFile::rSXFFile& file) {
         QPoint left_bottom(file.m_passport.m_frame_coordinates.m_southwest.m_x, file.m_passport.m_frame_coordinates.m_southwest.m_y);
         QPoint right_bottom(file.m_passport.m_frame_coordinates.m_southeast.m_x, file.m_passport.m_frame_coordinates.m_southeast.m_y);
@@ -221,12 +281,9 @@ namespace nDraw {
         double meters_width = file.m_passport.m_rectang_coords.m_northeast.m_y - file.m_passport.m_rectang_coords.m_northwest.m_y;
         double discrete_length = left_top.x() - left_bottom.x();
         double discrete_width = right_top.y() - left_top.y();
-        std::cout << "M: " << meters_length << " " << meters_width << std::endl;
-        std::cout << "D: " << discrete_length << " " << discrete_width << std::endl;
 
         METERS_DESCRETE_X_D = meters_length/discrete_length;
         METERS_DESCRETE_Y_D = meters_width/discrete_width;
-        std::cout << "ANS: " << METERS_DESCRETE_X_D << " " << METERS_DESCRETE_Y_D << std::endl;
 
         double image_size_x_disc = qMax(right_bottom.y(), right_top.y()) - qMin(left_bottom.y(), left_top.y()) + 2 * OFFSET;
         image_size_x_disc *= METERS_DESCRETE_Y_D; // Перевод из дискрет в метры
@@ -234,7 +291,7 @@ namespace nDraw {
         image_size_y_disc *= METERS_DESCRETE_X_D;
 
         /* Вычисление размера пикселя в метрах ( подробнее об этом тут https://help13.gisserver.ru/russian/panorama/index.html?vekbmp.html ) */
-        int32_t precision_met = /*file.m_passport.m_instrument_resolution_l*/ 5000; // Внимание! От этого значения зависит размер изображения, его можно изменять (уменьшать - меньше разрешение изображения)
+        int32_t precision_met = /*file.m_passport.m_instrument_resolution_l*/ 6000; // Внимание! От этого значения зависит размер изображения, его можно изменять (уменьшать - меньше разрешение изображения)
         PIXEL_METERS_D = 1.0f*(file.m_passport.m_scale_l / precision_met);
         int32_t image_size_x_pix = qRound(image_size_x_disc / PIXEL_METERS_D);
         int32_t image_size_y_pix = qRound(image_size_y_disc / PIXEL_METERS_D);
@@ -272,20 +329,26 @@ namespace nDraw {
                                       left_top << right_top <<
                                       right_bottom)); // Задание границ отрисовки (всё, что попадет за рамку отрисовано не будет)
 
-        /* Отрисовка объектов гидрографии */
-        DrawHydrography(painter, file);
-
-        /* Отрисовка растительности */
-        DrawVegitation(painter, file);
-
-        /* Отрисовка рельефа суши */
-        DrawLandRelief(painter, file);
+        /* Отрисовка населенных пунктов */
+        DrawSettlements(painter, file);
 
         /* Отрисовка объектов растительности с заливкой */
         DrawVegitationFilled(painter, file);
 
-        /* Отрисовка населенных пунктов */
-        DrawSettlements(painter, file);
+        /* Отрисовка грунтов и лавовых покровов */
+        DrawSoilsAndLavaSheets(painter, file);
+
+        /* Отрисовка рельефа суши */
+        DrawLandRelief(painter, file);
+
+        /* Отрисовка растительности */
+        DrawVegitation(painter, file);
+
+        /* Отрисовка гидрографии */
+        DrawHydrography(painter, file);
+
+        /* Отрисовка рельефа гидрографии */
+        DrawReliefOfHydrography(painter, file);
 
         painter.end();
         picture.save("result.png", "PNG");
