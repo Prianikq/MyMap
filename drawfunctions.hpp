@@ -8,6 +8,20 @@ namespace nDraw {
     double METERS_DESCRETE_X_D; // Определяет значение, сколько метров содержится в 1 дискрете (по X и Y координате отдельно)
     double METERS_DESCRETE_Y_D;
     double PIXEL_METERS_D; // Определяет значение, сколько метров в 1 пикселе
+
+    int32_t IMAGE_SIZE_X_PIX; // Размеры в пикселях выходного изображения
+    int32_t IMAGE_SIZE_Y_PIX;
+
+    /* Константы линейных функций для получения размера иконки по разрешению экрана (выводились экспериментально - по анализу изменения размера некоторой иконки) */
+    const double K_X = 12.0 / 3168.0; // <размер иконки по x> = K_X * <размер изображения по x> + B_X
+    const double B_X = 17.0 - 4608 * K_X;
+    const double K_Y = 9.0 / 3209.0;
+    const double B_Y = 15.0 - 4666 * K_Y;
+    const double SIZE_ICON_X = 6; // Константы размера (в редакторе создания) той иконки, относительно который выводилась линейная функция
+    const double SIZE_ICON_Y = 5; // Данные константы нужны для относительного преобразования размеров иконок с учетом их изначальных размеров
+    double REAL_SIZE_ICON_X; // Размер иконки (по которой выводилась линейная функция) с учетом разрешения изображения
+    double REAL_SIZE_ICON_Y;
+
     template<class T>
     QPointF FromMapPointToWindowPointF(const T& coords_input) {
         double x = (1.0*coords_orig_g.x() - coords_input.x()) * METERS_DESCRETE_X_D / PIXEL_METERS_D;
@@ -185,24 +199,42 @@ namespace nDraw {
     void DrawVegitation(QPainter& painter, const nSXFFile::rSXFFile& file) {
         static const int32_t CODES_LINE_COUNT = 2;
         static const int32_t VEGITATION_LINE_CODES[CODES_LINE_COUNT] = {71111110, 71131000}; // Массив с кодами линейных объектов (отрисовываются одинаково)
+        static const int32_t FOREST_DENSE_HIGH_CODE = 71111110;
+        static const int32_t FOREST_RARE_LOWGROWTH_CODE = 71111220;
         /* Здесь также нужно отрисовать несколько точечных объектов-значков и 2 площадных с заполнением в виде значков - это пока не реализовано */
         for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
-            if (file.m_records[i].m_title.LocalizationType() != nSXFFile::eLocalType::LINEAR) {
-                continue; // Все объекты, представленные в этом слое - линейные
+            if (file.m_records[i].m_title.LocalizationType() == nSXFFile::eLocalType::LINEAR) {
+                bool find = false;
+                for (int32_t j = 0; j < CODES_LINE_COUNT; ++j) {
+                    if (file.m_records[i].m_title.m_classification_code_l == VEGITATION_LINE_CODES[j]) {
+                        find = true;
+                        break;
+                    }
+                }
+                if (!find) {
+                    continue;
+                }
+                painter.setPen(QPen(Qt::black, 2, Qt::DotLine));
+                QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+                painter.drawPolyline(points.data(), points.size());
             }
-            bool find = false;
-            for (int32_t j = 0; j < CODES_LINE_COUNT; ++j) {
-                if (file.m_records[i].m_title.m_classification_code_l == VEGITATION_LINE_CODES[j]) {
-                    find = true;
-                    break;
+            if (file.m_records[i].m_title.LocalizationType() == nSXFFile::eLocalType::POINT) {
+                if (file.m_records[i].m_title.m_classification_code_l == FOREST_DENSE_HIGH_CODE) {
+                    std::cout << "HERE" << std::endl;
+                    static const double SIZE[] = {9, 9};
+                    double REAL_SIZE_X = qMax(SIZE[0], REAL_SIZE_ICON_X * SIZE[0] / SIZE_ICON_X);
+                    double REAL_SIZE_Y = qMax(SIZE[1], REAL_SIZE_ICON_Y * SIZE[1] / SIZE_ICON_Y);
+                    std::cout << REAL_SIZE_X << " " << REAL_SIZE_Y << std::endl;
+                    QPixmap image("images/" + QString::number(FOREST_DENSE_HIGH_CODE) + ".png");
+                    painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+                    QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+                    painter.drawPixmap(QRectF(points[0].x() - REAL_SIZE_X/2.0, points[0].y() - REAL_SIZE_Y/2,
+                            REAL_SIZE_X, REAL_SIZE_Y), image, QRectF(0, 0, image.width(), image.height()));
+                }
+                else if (file.m_records[i].m_title.m_classification_code_l == FOREST_RARE_LOWGROWTH_CODE) {
+
                 }
             }
-            if (!find) {
-                continue;
-            }
-            painter.setPen(QPen(Qt::black, 2, Qt::DotLine));
-            QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
-            painter.drawPolyline(points.data(), points.size());
         }
     }
 
@@ -291,13 +323,16 @@ namespace nDraw {
         image_size_y_disc *= METERS_DESCRETE_X_D;
 
         /* Вычисление размера пикселя в метрах ( подробнее об этом тут https://help13.gisserver.ru/russian/panorama/index.html?vekbmp.html ) */
-        int32_t precision_met = /*file.m_passport.m_instrument_resolution_l*/ 6000; // Внимание! От этого значения зависит размер изображения, его можно изменять (уменьшать - меньше разрешение изображения)
+        int32_t precision_met = file.m_passport.m_instrument_resolution_l /*6000*/; // Внимание! От этого значения зависит размер изображения, его можно изменять (уменьшать - меньше разрешение изображения)
         PIXEL_METERS_D = 1.0f*(file.m_passport.m_scale_l / precision_met);
-        int32_t image_size_x_pix = qRound(image_size_x_disc / PIXEL_METERS_D);
-        int32_t image_size_y_pix = qRound(image_size_y_disc / PIXEL_METERS_D);
-        std::cout << "РАЗМЕРЫ: " << image_size_x_pix << " " << image_size_y_pix << std::endl;
+        IMAGE_SIZE_X_PIX = qRound(image_size_x_disc / PIXEL_METERS_D);
+        IMAGE_SIZE_Y_PIX = qRound(image_size_y_disc / PIXEL_METERS_D);
+        std::cout << "РАЗМЕРЫ: " << IMAGE_SIZE_X_PIX << " " << IMAGE_SIZE_Y_PIX << std::endl;
 
-        QImage picture(image_size_x_pix, image_size_y_pix, QImage::Format_RGB32);
+        REAL_SIZE_ICON_X = K_X * IMAGE_SIZE_X_PIX + B_X;
+        REAL_SIZE_ICON_Y = K_Y * IMAGE_SIZE_Y_PIX + B_Y;
+
+        QImage picture(IMAGE_SIZE_X_PIX, IMAGE_SIZE_Y_PIX, QImage::Format_RGB32);
         picture.fill(Qt::lightGray);
         QPainter painter;
         painter.begin(&picture);
