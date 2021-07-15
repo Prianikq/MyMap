@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QPixmap>
 #include "rsxffile.h"
 #include "drawfunctions.hpp"
 #include <iostream>

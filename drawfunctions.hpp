@@ -21,6 +21,22 @@ namespace nDraw {
     const double SIZE_ICON_Y = 5; // Данные константы нужны для относительного преобразования размеров иконок с учетом их изначальных размеров
     double REAL_SIZE_ICON_X; // Размер иконки (по которой выводилась линейная функция) с учетом разрешения изображения
     double REAL_SIZE_ICON_Y;
+    void GetRealSizes(const short& width, const short& height, double& real_size_x, double& real_size_y) { // Функция, вычисляющая реальные размеры иконок
+        real_size_x = qMax(width*1.0, 1.0*REAL_SIZE_ICON_X * width / SIZE_ICON_X);
+        real_size_y = qMax(height*1.0, 1.0*REAL_SIZE_ICON_Y * height / SIZE_ICON_Y);
+    }
+    QPixmap ChangeTextureSizes(const QPixmap& icon, const double& real_size_x, const double& real_size_y) {
+        /* Постоянные линейных функций зависимости размера текстуры от размера значка (для отрисовки площадных объектов заполненных значками) */
+        static const double K_X = 10;
+        static const double B_X = 0;
+        static const double K_Y = 8.2;
+        static const double B_Y = 0;
+        int32_t texture_size_x = qRound(K_X*real_size_x+B_X);
+        int32_t texture_size_y = qRound(K_Y*real_size_y+B_Y);
+        QPixmap result = icon;
+        result = result.scaled(texture_size_x, texture_size_y, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        return result;
+    }
 
     template<class T>
     QPointF FromMapPointToWindowPointF(const T& coords_input) {
@@ -63,6 +79,37 @@ namespace nDraw {
         return result;
     }
 
+    void DrawPointObject(const nSXFFile::rRecord& record, QPainter& painter) {
+        double real_size_x, real_size_y;
+        QPixmap image("images/" + QString::number(record.m_title.m_classification_code_l) + ".png");
+        GetRealSizes(image.width(), image.height(), real_size_x, real_size_y);
+        image = image.scaled(image.width(), image.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+        QVector<QPointF> points = GetMetricPoints(record);
+        painter.drawPixmap(QRect(qRound(points[0].x() - real_size_x/2.0), qRound(points[0].y() - real_size_y/2),
+                qRound(real_size_x), qRound(real_size_y)), image, QRect(0, 0, image.width(), image.height()));
+    }
+    void DrawSquareObjectWithIcons(const short& width, const short& height, const nSXFFile::rRecord& record, QPainter& painter) {
+        double real_size_x, real_size_y;
+        GetRealSizes(width, height, real_size_x, real_size_y);
+        QPixmap icon("images/" + QString::number(record.m_title.m_classification_code_l) + ".png");
+        //std::cout << "BEFORE: " << icon.width() << " " << icon.height() << std::endl;
+        icon = ChangeTextureSizes(icon, real_size_x, real_size_y);
+        //std::cout << "AFTER: " << icon.width() << " " << icon.height() << std::endl;
+        painter.setPen(QPen(Qt::black, 1, Qt::NoPen));
+        painter.setBrush(QBrush(icon));
+        QVector<QPointF> points = GetMetricPoints(record);
+        painter.drawPolygon(points.data(), points.count());
+    }
+    bool SearchInGroupCodes(const int32_t* array, const int32_t& array_size, const int32_t& code) {
+        for (int32_t i = 0; i < array_size; ++i) {
+            if (array[i] == code) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     void DrawHydrography(QPainter& painter, const nSXFFile::rSXFFile &file) {
         static const int32_t CODES_COUNT = 9;
         static const int32_t HYDROGRAPHY_CODE[CODES_COUNT] = {31110000, 31120000, 31131000, 31132000, 31133000, 31134000,
@@ -91,44 +138,37 @@ namespace nDraw {
             else if (localiz_type == nSXFFile::eLocalType::POINT) {
                 painter.drawPoint(points[0]);
             }
-            else {
-                 // Других типов характеров локализации среди объектов гидрографии нет
-            }
         }
     }
 
     void DrawLandRelief(QPainter& painter, const nSXFFile::rSXFFile &file) {
-        static const int32_t CODES_COUNT = 6;
-        static const int32_t LAND_RELIEF_CODE_LINEAR[CODES_COUNT] = {21100000, 21200000, 21300000, 22212000, 22221000, 22630000};
-        static const int32_t PIT_CODE = 22250000;
-        static const int32_t BARROW_CODE = 22520000;
+        /* Коды линейных объектов */
+        static const int32_t LINEAR_CODES_COUNT = 6;
         static const int32_t HORIZONTALS_CODE = 21100000;
+        static const int32_t LINEAR_OBJECTS_CODES[LINEAR_CODES_COUNT] = {HORIZONTALS_CODE, 21200000, 21300000, 22212000, 22221000, 22630000};
+        /* Коды точечных объектов */
+        static const int32_t POINT_CODES_COUNT = 2;
+        static const int32_t POINT_OBJECTS_CODES[POINT_CODES_COUNT] = {22250000, 22520000};
+
         for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
-            if (file.m_records[i].m_title.m_classification_code_l == PIT_CODE) {
-                // Отрисовка значка
-            }
-            else if (file.m_records[i].m_title.m_classification_code_l == BARROW_CODE) {
-                // Отрисовка значка
-            }
-            else {
-                bool find = false;
-                for (int32_t j = 0; j < CODES_COUNT; ++j) {
-                    if (file.m_records[i].m_title.m_classification_code_l == LAND_RELIEF_CODE_LINEAR[j]) {
-                        find = true;
-                        break;
-                    }
-                }
-                if (!find) {
+            if (file.m_records[i].m_title.LocalizationType() == nSXFFile::LINEAR) {
+                if (!SearchInGroupCodes(LINEAR_OBJECTS_CODES, LINEAR_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
                     continue;
                 }
                 if (file.m_records[i].m_title.m_classification_code_l == HORIZONTALS_CODE) {
-                    painter.setPen(QPen(Qt::darkYellow, 2, Qt::SolidLine));
+                    painter.setPen(QPen(Qt::darkYellow, 2, Qt::SolidLine)); // ПОМЕНЯТЬ ЦВЕТ (СМ. ЦВЕТ ЗНАЧКА)
                 }
                 else {
-                    painter.setPen(QPen(Qt::darkYellow, 1, Qt::SolidLine));
+                    painter.setPen(QPen(Qt::darkYellow, 1, Qt::SolidLine)); // ПОМЕНЯТЬ ЦВЕТ (СМ. ЦВЕТ ЗНАЧКА)
                 }
                 QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
                 painter.drawPolyline(points.data(), points.size());
+            }
+            else if (file.m_records[i].m_title.LocalizationType() == nSXFFile::POINT) {
+                if (!SearchInGroupCodes(POINT_OBJECTS_CODES, POINT_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
+                    continue;
+                }
+                DrawPointObject(file.m_records[i], painter);
             }
         }
     }
@@ -197,41 +237,37 @@ namespace nDraw {
     }
 
     void DrawVegitation(QPainter& painter, const nSXFFile::rSXFFile& file) {
-        static const int32_t CODES_LINE_COUNT = 2;
-        static const int32_t VEGITATION_LINE_CODES[CODES_LINE_COUNT] = {71111110, 71131000}; // Массив с кодами линейных объектов (отрисовываются одинаково)
-        static const int32_t FOREST_DENSE_HIGH_CODE = 71111110;
-        static const int32_t FOREST_RARE_LOWGROWTH_CODE = 71111220;
-        /* Здесь также нужно отрисовать несколько точечных объектов-значков и 2 площадных с заполнением в виде значков - это пока не реализовано */
+        /* Коды линейных объектов */
+        static const int32_t LINEAR_CODES_COUNT = 2;
+        static const int32_t LINEAR_OBJECTS_CODES[LINEAR_CODES_COUNT] = {71111110, 71131000};
+        /* Коды точечных объектов */
+        static const int32_t POINT_CODES_COUNT = 4;
+        static const int32_t POINT_OBJECTS_CODES[POINT_CODES_COUNT] = {71111110, 71111220, 71132000, 71211200};
+        /* Коды площадных объектов */
+        static const int32_t MEADOW_VEGITATION_CODE = 71314000;
+        static const int32_t RICE_FIELDS_CODE = 71322100;
         for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
             if (file.m_records[i].m_title.LocalizationType() == nSXFFile::eLocalType::LINEAR) {
-                bool find = false;
-                for (int32_t j = 0; j < CODES_LINE_COUNT; ++j) {
-                    if (file.m_records[i].m_title.m_classification_code_l == VEGITATION_LINE_CODES[j]) {
-                        find = true;
-                        break;
-                    }
-                }
-                if (!find) {
+                if (!SearchInGroupCodes(LINEAR_OBJECTS_CODES, LINEAR_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
                     continue;
                 }
                 painter.setPen(QPen(Qt::black, 2, Qt::DotLine));
                 QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
                 painter.drawPolyline(points.data(), points.size());
             }
-            if (file.m_records[i].m_title.LocalizationType() == nSXFFile::eLocalType::POINT) {
-                if (file.m_records[i].m_title.m_classification_code_l == FOREST_DENSE_HIGH_CODE) {
-                    std::cout << "HERE" << std::endl;
-                    static const double SIZE[] = {9, 9};
-                    double REAL_SIZE_X = qMax(SIZE[0], REAL_SIZE_ICON_X * SIZE[0] / SIZE_ICON_X);
-                    double REAL_SIZE_Y = qMax(SIZE[1], REAL_SIZE_ICON_Y * SIZE[1] / SIZE_ICON_Y);
-                    std::cout << REAL_SIZE_X << " " << REAL_SIZE_Y << std::endl;
-                    QPixmap image("images/" + QString::number(FOREST_DENSE_HIGH_CODE) + ".png");
-                    painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
-                    QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
-                    painter.drawPixmap(QRectF(points[0].x() - REAL_SIZE_X/2.0, points[0].y() - REAL_SIZE_Y/2,
-                            REAL_SIZE_X, REAL_SIZE_Y), image, QRectF(0, 0, image.width(), image.height()));
+            else if (file.m_records[i].m_title.LocalizationType() == nSXFFile::eLocalType::POINT) {
+                if (!SearchInGroupCodes(POINT_OBJECTS_CODES, POINT_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
+                    continue;
                 }
-                else if (file.m_records[i].m_title.m_classification_code_l == FOREST_RARE_LOWGROWTH_CODE) {
+                DrawPointObject(file.m_records[i], painter);
+            }
+            else if (file.m_records[i].m_title.LocalizationType() == nSXFFile::eLocalType::AREAL) {
+                if (file.m_records[i].m_title.m_classification_code_l == MEADOW_VEGITATION_CODE) {
+                    static const short WIDTH = 3;
+                    static const short HEIGHT = 4;
+                    DrawSquareObjectWithIcons(WIDTH, HEIGHT, file.m_records[i], painter);
+                }
+                else if (file.m_records[i].m_title.m_classification_code_l == RICE_FIELDS_CODE) {
 
                 }
             }
@@ -323,7 +359,7 @@ namespace nDraw {
         image_size_y_disc *= METERS_DESCRETE_X_D;
 
         /* Вычисление размера пикселя в метрах ( подробнее об этом тут https://help13.gisserver.ru/russian/panorama/index.html?vekbmp.html ) */
-        int32_t precision_met = file.m_passport.m_instrument_resolution_l /*6000*/; // Внимание! От этого значения зависит размер изображения, его можно изменять (уменьшать - меньше разрешение изображения)
+        int32_t precision_met = /*file.m_passport.m_instrument_resolution_l*/ 6000; // Внимание! От этого значения зависит размер изображения, его можно изменять (уменьшать - меньше разрешение изображения)
         PIXEL_METERS_D = 1.0f*(file.m_passport.m_scale_l / precision_met);
         IMAGE_SIZE_X_PIX = qRound(image_size_x_disc / PIXEL_METERS_D);
         IMAGE_SIZE_Y_PIX = qRound(image_size_y_disc / PIXEL_METERS_D);
