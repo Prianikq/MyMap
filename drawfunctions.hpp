@@ -156,10 +156,10 @@ namespace nDraw {
                     continue;
                 }
                 if (file.m_records[i].m_title.m_classification_code_l == HORIZONTALS_CODE) {
-                    painter.setPen(QPen(Qt::darkYellow, 2, Qt::SolidLine)); // ПОМЕНЯТЬ ЦВЕТ (СМ. ЦВЕТ ЗНАЧКА)
+                    painter.setPen(QPen(QColor(180, 136, 60), 2, Qt::SolidLine));
                 }
                 else {
-                    painter.setPen(QPen(Qt::darkYellow, 1, Qt::SolidLine)); // ПОМЕНЯТЬ ЦВЕТ (СМ. ЦВЕТ ЗНАЧКА)
+                    painter.setPen(QPen(QColor(180, 136, 60), 1, Qt::SolidLine));
                 }
                 QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
                 painter.drawPolyline(points.data(), points.size());
@@ -299,27 +299,19 @@ namespace nDraw {
     }
 
     void DrawReliefOfHydrography(QPainter& painter, const nSXFFile::rSXFFile& file) {
-        static const int32_t SHALLOWS_CODE = 31211000;
+        /* Коды линейных объектов */
         static const int32_t STEEP_BANKS_CODE = 31242000;
         static const int32_t LINEAR_CODES_COUNT = 3;
-        static const int32_t RELIEF_HYDROGRAPHY_LINEAR_CODES[LINEAR_CODES_COUNT] = {STEEP_BANKS_CODE, 31310000, 31521000};
+        static const int32_t LINEAR_OBJECTS_CODES[LINEAR_CODES_COUNT] = {STEEP_BANKS_CODE, 31310000, 31521000};
+        /* Коды точечных объектов */
+        static const int32_t POINT_CODES_COUNT = 2;
+        static const int32_t POINT_OBJECTS_CODES[POINT_CODES_COUNT] = {31510000, 31531000};
+        /* Коды площадных объектов */
+        static const int32_t SHALLOWS_CODE = 31211000;
 
         for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
-            if (file.m_records[i].m_title.m_classification_code_l == SHALLOWS_CODE) {
-                painter.setPen(Qt::NoPen);
-                painter.setBrush(QBrush(Qt::black, Qt::Dense6Pattern));
-                QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
-                painter.drawPolygon(points.data(), points.size());
-            }
-            else {
-                bool find = false;
-                for (int j = 0; j < LINEAR_CODES_COUNT; ++j) {
-                    if (file.m_records[i].m_title.m_classification_code_l == RELIEF_HYDROGRAPHY_LINEAR_CODES[j]) {
-                        find = true;
-                        break;
-                    }
-                }
-                if (!find) {
+            if (file.m_records[i].m_title.LocalizationType() == nSXFFile::LINEAR) {
+                if (!SearchInGroupCodes(LINEAR_OBJECTS_CODES, LINEAR_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
                     continue;
                 }
                 QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
@@ -331,7 +323,62 @@ namespace nDraw {
                 }
                 painter.drawPolyline(points.data(), points.size());
             }
+            else if (file.m_records[i].m_title.LocalizationType() == nSXFFile::POINT) {
+                if (!SearchInGroupCodes(POINT_OBJECTS_CODES, POINT_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
+                    continue;
+                }
+                DrawPointObject(file.m_records[i], painter);
+            }
+            else if (file.m_records[i].m_title.LocalizationType() == nSXFFile::AREAL) {
+                if (file.m_records[i].m_title.m_classification_code_l == SHALLOWS_CODE) {
+                    painter.setPen(Qt::NoPen);
+                    painter.setBrush(QBrush(Qt::black, Qt::Dense6Pattern));
+                    QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+                    painter.drawPolygon(points.data(), points.size());
+                }
+            }
         }
+    }
+
+    void DrawHydraulicStructures(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        /* Коды точечных объектов */
+        static const int32_t POINT_CODES_COUNT = 4;
+        static const int32_t POINT_OBJECTS_CODES[POINT_CODES_COUNT] = {31612000, 31635000, 32250000, 32410000};
+        /* Коды линейных объектов */
+        static const int32_t GATEWAYS_CODE = 32120000;
+        static const int32_t BANKS_WITH_FORTIF_SLOPES_CODE = 32150000;
+        static const int32_t AUTOCARRIAGE_FERRIES_CODE = 33113000;
+        static const int32_t LINEAR_CODES_COUNT = 3;
+        static const int32_t LINEAR_OBJECTS_CODES[LINEAR_CODES_COUNT] = {GATEWAYS_CODE, BANKS_WITH_FORTIF_SLOPES_CODE, AUTOCARRIAGE_FERRIES_CODE};
+
+        for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
+            if (file.m_records[i].m_title.LocalizationType() == nSXFFile::POINT) {
+                if (!SearchInGroupCodes(POINT_OBJECTS_CODES, POINT_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
+                    continue;
+                }
+                DrawPointObject(file.m_records[i], painter);
+            }
+            else if (file.m_records[i].m_title.LocalizationType() == nSXFFile::LINEAR) {
+                if (!SearchInGroupCodes(LINEAR_OBJECTS_CODES, LINEAR_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
+                    continue;
+                }
+                QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+                if (file.m_records[i].m_title.m_classification_code_l == GATEWAYS_CODE) {
+                    painter.setPen(QPen(Qt::black, 2, Qt::SolidLine));
+                    QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+                    painter.drawPolyline(points.data(), points.count());
+                    painter.setPen(QPen(QColor(0, 191, 255), 1, Qt::SolidLine));
+                }
+                else if (file.m_records[i].m_title.m_classification_code_l == BANKS_WITH_FORTIF_SLOPES_CODE) {
+                    painter.setPen(QPen(Qt::blue, 1, Qt::SolidLine));
+                }
+                else if (file.m_records[i].m_title.m_classification_code_l == AUTOCARRIAGE_FERRIES_CODE)  {
+                    painter.setPen(QPen(Qt::black, 1, Qt::DashLine));
+                }
+                painter.drawPolyline(points.data(), points.count());
+            }
+        }
+
     }
 
     void Draw(const nSXFFile::rSXFFile& file) {
@@ -420,6 +467,9 @@ namespace nDraw {
 
         /* Отрисовка рельефа гидрографии */
         DrawReliefOfHydrography(painter, file);
+
+        /* Отрисовка гидротехнических сооружений */
+        DrawHydraulicStructures(painter, file);
 
         painter.end();
         picture.save("result.png", "PNG");
