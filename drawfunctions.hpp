@@ -12,18 +12,27 @@ namespace nDraw {
     int32_t IMAGE_SIZE_X_PIX; // Размеры в пикселях выходного изображения
     int32_t IMAGE_SIZE_Y_PIX;
 
-    /* Константы линейных функций для получения размера иконки по разрешению экрана (выводились экспериментально - по анализу изменения размера некоторой иконки) */
-    const double K_X = 12.0 / 3168.0; // <размер иконки по x> = K_X * <размер изображения по x> + B_X
-    const double B_X = 17.0 - 4608 * K_X;
-    const double K_Y = 9.0 / 3209.0;
-    const double B_Y = 15.0 - 4666 * K_Y;
-    const double SIZE_ICON_X = 6; // Константы размера (в редакторе создания) той иконки, относительно который выводилась линейная функция
-    const double SIZE_ICON_Y = 5; // Данные константы нужны для относительного преобразования размеров иконок с учетом их изначальных размеров
-    double REAL_SIZE_ICON_X; // Размер иконки (по которой выводилась линейная функция) с учетом разрешения изображения
-    double REAL_SIZE_ICON_Y;
     void GetRealSizes(const short& width, const short& height, double& real_size_x, double& real_size_y) { // Функция, вычисляющая реальные размеры иконок
-        real_size_x = qMax(width*1.0, 1.0*REAL_SIZE_ICON_X * width / SIZE_ICON_X);
-        real_size_y = qMax(height*1.0, 1.0*REAL_SIZE_ICON_Y * height / SIZE_ICON_Y);
+        /* Константы линейных функций для получения размера иконки по разрешению экрана (выводились экспериментально - по анализу изменения размера некоторой иконки) */
+        static const double K_X = 12.0 / 3168.0; // <размер иконки по x> = K_X * <размер изображения по x> + B_X
+        static const double B_X = 17.0 - 4608 * K_X;
+        static const double K_Y = 9.0 / 3209.0;
+        static const double B_Y = 15.0 - 4666 * K_Y;
+        static const double REAL_SIZE_ICON_X = K_X * IMAGE_SIZE_X_PIX + B_X; // Размер иконки (по которой выводилась линейная функция) с учетом разрешения изображения
+        static const double REAL_SIZE_ICON_Y = K_Y * IMAGE_SIZE_Y_PIX + B_Y;
+        static const double SIZE_ICON_X = 6; // Константы размера (в редакторе создания) той иконки, относительно который выводилась линейная функция
+        static const double SIZE_ICON_Y = 5; // Данные константы нужны для относительного преобразования размеров иконок с учетом их изначальных размеров
+        static const double BEGIN_SCALE_X = 17;
+        static const double BEGIN_SCALE_Y = 15;
+
+        if (qRound(REAL_SIZE_ICON_X) >= BEGIN_SCALE_X && qRound(REAL_SIZE_ICON_Y) >= BEGIN_SCALE_Y) {
+            real_size_x = 1.0*REAL_SIZE_ICON_X * width / SIZE_ICON_X;
+            real_size_y = 1.0*REAL_SIZE_ICON_Y * height / SIZE_ICON_Y;
+        }
+        else {
+            real_size_x = width;
+            real_size_y = height;
+        }
     }
     QPixmap ChangeTextureSizes(const QPixmap& icon, const double& real_size_x, const double& real_size_y) {
         /* Постоянные линейных функций зависимости размера текстуры от размера значка (для отрисовки площадных объектов заполненных значками) */
@@ -83,7 +92,6 @@ namespace nDraw {
         double real_size_x, real_size_y;
         QPixmap image("images/" + QString::number(record.m_title.m_classification_code_l) + ".png");
         GetRealSizes(image.width(), image.height(), real_size_x, real_size_y);
-        image = image.scaled(image.width(), image.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
         QVector<QPointF> points = GetMetricPoints(record);
         painter.drawPixmap(QRect(qRound(points[0].x() - real_size_x/2.0), qRound(points[0].y() - real_size_y/2),
@@ -251,7 +259,7 @@ namespace nDraw {
                 if (!SearchInGroupCodes(LINEAR_OBJECTS_CODES, LINEAR_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
                     continue;
                 }
-                painter.setPen(QPen(Qt::black, 2, Qt::DotLine));
+                painter.setPen(QPen(Qt::black, 1.5, Qt::DotLine));
                 QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
                 painter.drawPolyline(points.data(), points.size());
             }
@@ -366,7 +374,7 @@ namespace nDraw {
                 if (file.m_records[i].m_title.m_classification_code_l == GATEWAYS_CODE) {
                     painter.setPen(QPen(Qt::black, 2, Qt::SolidLine));
                     QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
-                    painter.drawPolyline(points.data(), points.count());
+                    painter.drawPolyline(points);
                     painter.setPen(QPen(QColor(0, 191, 255), 1, Qt::SolidLine));
                 }
                 else if (file.m_records[i].m_title.m_classification_code_l == BANKS_WITH_FORTIF_SLOPES_CODE) {
@@ -375,10 +383,88 @@ namespace nDraw {
                 else if (file.m_records[i].m_title.m_classification_code_l == AUTOCARRIAGE_FERRIES_CODE)  {
                     painter.setPen(QPen(Qt::black, 1, Qt::DashLine));
                 }
-                painter.drawPolyline(points.data(), points.count());
+                painter.drawPolyline(points);
             }
         }
+    }
 
+    void DrawFillingAndCutting(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        /* Коды линейных объектов */
+        static const int32_t CUTTINGS_CODE = 62360000;
+
+        for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
+            if (file.m_records[i].m_title.LocalizationType() == nSXFFile::LINEAR) {
+                if (file.m_records[i].m_title.m_classification_code_l == CUTTINGS_CODE) {
+                    painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+                    QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+                    painter.drawPolyline(points);
+                    painter.setPen(Qt::DotLine);
+                    painter.drawPolyline(points);
+                }
+            }
+        }
+    }
+
+    void DrawRoadNetwork(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        /* Коды линейных объектов */
+        static const int32_t OPERATING_RAILWAYS_CODE = 61111000;
+        static const int32_t ACCESS_ROADS_CODE = 61122000;
+        // В разработке
+    }
+
+    void DrawRoadStructures(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        /* Коды точечных объектов */
+        static const int32_t POINT_CODES_COUNT = 2;
+        static const int32_t POINT_OBJECTS_CODES[POINT_CODES_COUNT] = {62131000, 62133000};
+
+        for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
+            if (file.m_records[i].m_title.LocalizationType() == nSXFFile::POINT) {
+                if (!SearchInGroupCodes(POINT_OBJECTS_CODES, POINT_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
+                    continue;
+                }
+                DrawPointObject(file.m_records[i], painter);
+            }
+        }
+    }
+
+    void DrawSettlementsQuarters(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        /* Коды точечных объектов */
+        static const int32_t SEPARATE_BUILDINGS_CODE = 44200000;
+        /* Коды площадных объектов */
+        static const int32_t AREAL_CODES_COUNT = 2;
+        static const int32_t AREAL_OBJECTS_CODES[AREAL_CODES_COUNT] = {42200000, 44200000}; // Отрисовываются одинаково
+
+        for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
+            if (file.m_records[i].m_title.LocalizationType() == nSXFFile::POINT) {
+                if (file.m_records[i].m_title.m_classification_code_l == SEPARATE_BUILDINGS_CODE) {
+                    DrawPointObject(file.m_records[i], painter);
+                }
+            }
+            else if (file.m_records[i].m_title.LocalizationType() == nSXFFile::AREAL) {
+                if (!SearchInGroupCodes(AREAL_OBJECTS_CODES, AREAL_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
+                    continue;
+                }
+                painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+                painter.setBrush(QBrush(Qt::black, Qt::SolidPattern));
+                QVector<QPointF> points = GetMetricPoints(file.m_records[i]);
+                painter.drawPolygon(points);
+            }
+        }
+    }
+
+    void DrawIndustrialSocialFacilities(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        /* Коды точечных объектов */
+        static const int32_t POINT_CODES_COUNT = 14;
+        static const int32_t POINT_OBJECTS_CODES[POINT_CODES_COUNT] = {51130000, 51230000, 51410000, 51420000, 51460000, 51470000, 51500000, 52100000, 53180000, 53340000, 53420000, 53510000, 53530000, 53600000 };
+
+        for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
+            if (file.m_records[i].m_title.LocalizationType() == nSXFFile::POINT) {
+                if (!SearchInGroupCodes(POINT_OBJECTS_CODES, POINT_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
+                    continue;
+                }
+                DrawPointObject(file.m_records[i], painter);
+            }
+        }
     }
 
     void Draw(const nSXFFile::rSXFFile& file) {
@@ -411,9 +497,6 @@ namespace nDraw {
         IMAGE_SIZE_X_PIX = qRound(image_size_x_disc / PIXEL_METERS_D);
         IMAGE_SIZE_Y_PIX = qRound(image_size_y_disc / PIXEL_METERS_D);
         std::cout << "РАЗМЕРЫ: " << IMAGE_SIZE_X_PIX << " " << IMAGE_SIZE_Y_PIX << std::endl;
-
-        REAL_SIZE_ICON_X = K_X * IMAGE_SIZE_X_PIX + B_X;
-        REAL_SIZE_ICON_Y = K_Y * IMAGE_SIZE_Y_PIX + B_Y;
 
         QImage picture(IMAGE_SIZE_X_PIX, IMAGE_SIZE_Y_PIX, QImage::Format_RGB32);
         picture.fill(Qt::lightGray);
@@ -470,6 +553,21 @@ namespace nDraw {
 
         /* Отрисовка гидротехнических сооружений */
         DrawHydraulicStructures(painter, file);
+
+        /* Отрисовка насыпей и выемок */
+        DrawFillingAndCutting(painter, file);
+
+        /* Отрисовка дорожной сети */
+        DrawRoadNetwork(painter, file);
+
+        /* Отрисовка дорожных сооружений */
+        DrawRoadStructures(painter, file);
+
+        /* Отрисовка населённых пунктов (кварталов) */
+        DrawSettlementsQuarters(painter, file);
+
+        /* Отрисовка промышленных, социальных объектов */
+        DrawIndustrialSocialFacilities(painter, file);
 
         painter.end();
         picture.save("result.png", "PNG");
