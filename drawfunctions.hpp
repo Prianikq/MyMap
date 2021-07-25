@@ -467,6 +467,29 @@ namespace nDraw {
         }
     }
 
+    void DrawPlannedHighRiseBasis(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        /* Коды точечных объектов */
+        static const int32_t POINT_CODES_COUNT = 2;
+        static const int32_t POINT_OBJECTS_CODES[POINT_CODES_COUNT] = {11200000, 12000000};
+
+        for (int32_t i = 0; i < file.m_descriptor.m_number_records_l; ++i) {
+            if (file.m_records[i].m_title.LocalizationType() == nSXFFile::POINT) {
+                if (!SearchInGroupCodes(POINT_OBJECTS_CODES, POINT_CODES_COUNT, file.m_records[i].m_title.m_classification_code_l)) {
+                    continue;
+                }
+                DrawPointObject(file.m_records[i], painter);
+            }
+        }
+    }
+
+    void DrawBordersAndFences(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        // В разработке
+    }
+
+    void DrawTitlesAndSignatures(QPainter& painter, const nSXFFile::rSXFFile& file) {
+        // В разработке
+    }
+
     void Draw(const nSXFFile::rSXFFile& file) {
         QPoint left_bottom(file.m_passport.m_frame_coordinates.m_southwest.m_x, file.m_passport.m_frame_coordinates.m_southwest.m_y);
         QPoint right_bottom(file.m_passport.m_frame_coordinates.m_southeast.m_x, file.m_passport.m_frame_coordinates.m_southeast.m_y);
@@ -568,6 +591,15 @@ namespace nDraw {
 
         /* Отрисовка промышленных, социальных объектов */
         DrawIndustrialSocialFacilities(painter, file);
+
+        /* Отрисовка границ и ограждений */
+        DrawBordersAndFences(painter, file);
+
+        /* Отрисовка планово-высотной основы */
+        DrawPlannedHighRiseBasis(painter, file);
+
+        /* Отрисовка названий и подписей */
+        DrawTitlesAndSignatures(painter, file);
 
         painter.end();
         picture.save("result.png", "PNG");
