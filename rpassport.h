@@ -17,10 +17,10 @@ namespace nSXFFile {
     };
 
     struct rGeo_coord {
-        double m_b_d;
-        double m_l_d;
+        double m_d_b;
+        double m_d_l;
         void Print() {
-            std::cout << "B = " << this->m_b_d << "   L = " << this->m_l_d << std::endl;
+            std::cout << "B = " << this->m_d_b << "   L = " << this->m_d_l << std::endl;
         }
     };
 
@@ -47,25 +47,25 @@ namespace nSXFFile {
     };
 
     struct rPassport {
-        int32_t m_identifier_l;
-        int32_t m_length_record_l;
-        int32_t m_edition_l;
-        int32_t m_checksum_l;
-        char m_date_creation_a_c[12];
-        char m_nomenclature_a_c[32];
-        int32_t m_scale_l;
-        char m_map_name_a_c[32];
-        uint32_t m_information_flags_l;
-        int32_t m_classifier_code_l;
+        int32_t m_l_identifier;
+        int32_t m_l_length_record;
+        int32_t m_l_edition;
+        int32_t m_l_checksum;
+        char m_ac_date_creation[12];
+        char m_ac_nomenclature[32];
+        int32_t m_l_scale;
+        char m_ac_map_name[32];
+        uint32_t m_ul_information_flags;
+        int32_t m_l_classifier_code;
         rRectang_coord_of_corners<double> m_rectang_coords;
         rGeo_coord_of_corners m_geo_coords;
-        char m_mathematical_basis_a_c[8];
-        char m_source_material_ref_a_c[64];
-        double m_reserve_d;
-        int32_t m_instrument_resolution_l;
+        char m_ac_mathematical_basis[8];
+        char m_ac_source_material_ref[64];
+        double m_d_reserve;
+        int32_t m_l_instrument_resolution;
         rRectang_coord_of_corners<int32_t> m_frame_coordinates;
-        int32_t m_frame_code_l;
-        char m_source_material_proj_a_c[48];
+        int32_t m_l_frame_code;
+        char m_ac_source_material_proj[48];
         void Print();
     };
 }
