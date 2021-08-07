@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Отрисовка топографической карты SXF: Файл drawfunctions.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Отрисовка топографической карты SXF
+   </div>
+   <div id="projectbrief">Программа парсинга данных топографической карты формата SXF и её отрисовки.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#namespaces">Пространства имен</a> &#124;
+<a href="#func-members">Функции</a> &#124;
+<a href="#var-members">Переменные</a>  </div>
+  <div class="headertitle">
+<div class="title">Файл drawfunctions.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Содержит набор функций и методов для оформления данных карты на выходном изображении.  
+<a href="#details">Подробнее...</a></p>
+<div class="textblock"><code>#include &quot;rsxffile.h&quot;</code><br />
+<code>#include &lt;QImage&gt;</code><br />
+<code>#include &lt;QPainter&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для drawfunctions.hpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="drawfunctions_8hpp__incl.png" border="0" usemap="#drawfunctions_8hpp" alt=""/></div>
+<map name="drawfunctions_8hpp" id="drawfunctions_8hpp">
+<area shape="rect" title="Содержит набор функций и методов для оформления данных карты на выходном изображении." alt="" coords="251,5,393,32"/>
+<area shape="rect" href="rsxffile_8h_source.html" title=" " alt="" coords="183,80,261,107"/>
+<area shape="rect" title=" " alt="" coords="285,80,359,107"/>
+<area shape="rect" title=" " alt="" coords="383,80,461,107"/>
+<area shape="rect" href="rdescriptor_8h_source.html" title=" " alt="" coords="5,155,108,181"/>
+<area shape="rect" href="rpassport_8h_source.html" title=" " alt="" coords="132,155,227,181"/>
+<area shape="rect" href="rrecord_8h_source.html" title=" " alt="" coords="302,155,382,181"/>
+<area shape="rect" title=" " alt="" coords="233,229,296,256"/>
+<area shape="rect" title=" " alt="" coords="73,229,153,256"/>
+<area shape="rect" title=" " alt="" coords="320,229,393,256"/>
+</map>
+</div>
+</div>
+<p><a href="drawfunctions_8hpp_source.html">См. исходные тексты.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Пространства имен</h2></td></tr>
+<tr class="memitem:namespacenDraw"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenDraw.html">nDraw</a></td></tr>
+<tr class="memdesc:namespacenDraw"><td class="mdescLeft">&#160;</td><td class="mdescRight">Содерджит необходимые процедуры и функции отрисовки. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:afab4841b3d8310ea0c3cbd163b9cfa5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenDraw.html#afab4841b3d8310ea0c3cbd163b9cfa5f">nDraw::GetRealSizes</a> (const short &amp;p_s_width, const short &amp;p_s_height, double &amp;p_d_real_size_x, double &amp;p_d_real_size_y)</td></tr>
+<tr class="memdesc:afab4841b3d8310ea0c3cbd163b9cfa5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">GetRealSizes - вычисляет реальные размеры иконки (в пикселях), которую необходимо отрисовать. Данное преобразование необходимо для того, чтобы иконки имели возможность масштабироваться при изменении размеров выходного изображения, которые задаются в программе.  <a href="namespacenDraw.html#afab4841b3d8310ea0c3cbd163b9cfa5f">Подробнее...</a><br /></td></tr>
+<tr class="separator:afab4841b3d8310ea0c3cbd163b9cfa5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0738fdbc9f9599d1c1e1fb40b5e177f"><td class="memItemLeft" align="right" valign="top">QPixmap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenDraw.html#ad0738fdbc9f9599d1c1e1fb40b5e177f">nDraw::ChangeTextureSizes</a> (const QPixmap &amp;p_icon, const double &amp;p_d_real_size_x, const double &amp;p_d_real_size_y)</td></tr>
+<tr class="memdesc:ad0738fdbc9f9599d1c1e1fb40b5e177f"><td class="mdescLeft">&#160;</td><td class="mdescRight">ChangeTextureSizes - производит машстабирование текстуры, которая будет накладываться на некоторый площадной объект.  <a href="namespacenDraw.html#ad0738fdbc9f9599d1c1e1fb40b5e177f">Подробнее...</a><br /></td></tr>
+<tr class="separator:ad0738fdbc9f9599d1c1e1fb40b5e177f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad517345ede189fe3f316f113c7f6e6d9"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:ad517345ede189fe3f316f113c7f6e6d9"><td class="memTemplItemLeft" align="right" valign="top">QPointF&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenDraw.html#ad517345ede189fe3f316f113c7f6e6d9">nDraw::FromMapPointToWindowPointF</a> (const T &amp;p_coords_input)</td></tr>
+<tr class="memdesc:ad517345ede189fe3f316f113c7f6e6d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">FromMapPointToWindowPointF - выполняет преобразование координат точки из условной системы карты в пиксельную изображения.  <a href="namespacenDraw.html#ad517345ede189fe3f316f113c7f6e6d9">Подробнее...</a><br /></td></tr>
+<tr class="separator:ad517345ede189fe3f316f113c7f6e6d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa47a6c192ffbeb1adcbb35ec8dc681c4"><td class="memItemLeft" align="right" valign="top"><a id="aa47a6c192ffbeb1adcbb35ec8dc681c4"></a>
+QPoint&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::FromMapPointToWindowPoint</b> (const QPoint &amp;p_coords_input)</td></tr>
+<tr class="separator:aa47a6c192ffbeb1adcbb35ec8dc681c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1154583aca20aee3225c31848e1ef0e"><td class="memItemLeft" align="right" valign="top"><a id="aa1154583aca20aee3225c31848e1ef0e"></a>
+QVector&lt; QPointF &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::GetMetricPoints</b> (const <a class="el" href="structnSXFFile_1_1rRecord.html">nSXFFile::rRecord</a> &amp;p_record)</td></tr>
+<tr class="separator:aa1154583aca20aee3225c31848e1ef0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d75f14dbd2f98da8c848a087c613cd3"><td class="memItemLeft" align="right" valign="top"><a id="a1d75f14dbd2f98da8c848a087c613cd3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawPointObject</b> (const <a class="el" href="structnSXFFile_1_1rRecord.html">nSXFFile::rRecord</a> &amp;p_record, QPainter &amp;p_painter)</td></tr>
+<tr class="separator:a1d75f14dbd2f98da8c848a087c613cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad618fc6808c6667f4440932fb3c1af9d"><td class="memItemLeft" align="right" valign="top"><a id="ad618fc6808c6667f4440932fb3c1af9d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawSquareObjectWithIcons</b> (const short &amp;p_s_width, const short &amp;p_s_height, const <a class="el" href="structnSXFFile_1_1rRecord.html">nSXFFile::rRecord</a> &amp;p_record, QPainter &amp;p_painter)</td></tr>
+<tr class="separator:ad618fc6808c6667f4440932fb3c1af9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4026d656dd1d3601c37869150b2ef594"><td class="memItemLeft" align="right" valign="top"><a id="a4026d656dd1d3601c37869150b2ef594"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::SearchInGroupCodes</b> (const int32_t *p_pl_array, const int32_t &amp;p_l_array_size, const int32_t &amp;p_l_code)</td></tr>
+<tr class="separator:a4026d656dd1d3601c37869150b2ef594"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad141c4e6a4916519bc4d48147828e01d"><td class="memItemLeft" align="right" valign="top"><a id="ad141c4e6a4916519bc4d48147828e01d"></a>
+const <a class="el" href="structnSXFFile_1_1rSemantic.html">nSXFFile::rSemantic</a>&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::GetSemanticValue</b> (const <a class="el" href="structnSXFFile_1_1rRecord.html">nSXFFile::rRecord</a> &amp;p_record, const short &amp;p_s_semantic_code)</td></tr>
+<tr class="separator:ad141c4e6a4916519bc4d48147828e01d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51e26ce6f6fefba76afc9e086562e0e5"><td class="memItemLeft" align="right" valign="top"><a id="a51e26ce6f6fefba76afc9e086562e0e5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawVegitation</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:a51e26ce6f6fefba76afc9e086562e0e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab38dc49bdfac1550e015b9ee18478528"><td class="memItemLeft" align="right" valign="top"><a id="ab38dc49bdfac1550e015b9ee18478528"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawLandRelief</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:ab38dc49bdfac1550e015b9ee18478528"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad39e068f1f6f8b6f09785d425623ad5f"><td class="memItemLeft" align="right" valign="top"><a id="ad39e068f1f6f8b6f09785d425623ad5f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawSoilsAndLavaSheets</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:ad39e068f1f6f8b6f09785d425623ad5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ce37b47da08056404bfe2de24c26702"><td class="memItemLeft" align="right" valign="top"><a id="a7ce37b47da08056404bfe2de24c26702"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawHydrography</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:a7ce37b47da08056404bfe2de24c26702"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3268b71e9a656708ff14ea5b21c68ce"><td class="memItemLeft" align="right" valign="top"><a id="ac3268b71e9a656708ff14ea5b21c68ce"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawVegitationFilled</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:ac3268b71e9a656708ff14ea5b21c68ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb758f65726a2eb44f97d7b55e700924"><td class="memItemLeft" align="right" valign="top"><a id="afb758f65726a2eb44f97d7b55e700924"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawSettlements</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:afb758f65726a2eb44f97d7b55e700924"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0033e3c25199a80b9e60c7ea2115df6"><td class="memItemLeft" align="right" valign="top"><a id="af0033e3c25199a80b9e60c7ea2115df6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawReliefOfHydrography</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:af0033e3c25199a80b9e60c7ea2115df6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d197e66dc6fdf41ac1255128be0cdfe"><td class="memItemLeft" align="right" valign="top"><a id="a5d197e66dc6fdf41ac1255128be0cdfe"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawHydraulicStructures</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:a5d197e66dc6fdf41ac1255128be0cdfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c97264ab1c560491abd44850bf5d8f5"><td class="memItemLeft" align="right" valign="top"><a id="a4c97264ab1c560491abd44850bf5d8f5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawFillingAndCutting</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:a4c97264ab1c560491abd44850bf5d8f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacf9367aed079086dca1a4bd19154f19"><td class="memItemLeft" align="right" valign="top"><a id="aacf9367aed079086dca1a4bd19154f19"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawRoadNetwork</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:aacf9367aed079086dca1a4bd19154f19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97afa4dc1bb08f0cf98a33b04c0407f7"><td class="memItemLeft" align="right" valign="top"><a id="a97afa4dc1bb08f0cf98a33b04c0407f7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawRoadStructures</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:a97afa4dc1bb08f0cf98a33b04c0407f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a148aa00d15bea04733afd3675401173b"><td class="memItemLeft" align="right" valign="top"><a id="a148aa00d15bea04733afd3675401173b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawSettlementsQuarters</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:a148aa00d15bea04733afd3675401173b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4d71e296ca0c1d0fe1e2d3b4523febb"><td class="memItemLeft" align="right" valign="top"><a id="af4d71e296ca0c1d0fe1e2d3b4523febb"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawIndustrialSocialFacilities</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:af4d71e296ca0c1d0fe1e2d3b4523febb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7560c7674bd3a0792d26127467cccae4"><td class="memItemLeft" align="right" valign="top"><a id="a7560c7674bd3a0792d26127467cccae4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawPlannedHighRiseBasis</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:a7560c7674bd3a0792d26127467cccae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae518c14f5e5c785802c8ce284327ee1a"><td class="memItemLeft" align="right" valign="top"><a id="ae518c14f5e5c785802c8ce284327ee1a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawBordersAndFences</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:ae518c14f5e5c785802c8ce284327ee1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a517a9f9ce81b3812f684a1664e28288f"><td class="memItemLeft" align="right" valign="top"><a id="a517a9f9ce81b3812f684a1664e28288f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::DrawTitlesAndSignatures</b> (QPainter &amp;p_painter, const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:a517a9f9ce81b3812f684a1664e28288f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b1165ad568309eba1ccf52eff8e94aa"><td class="memItemLeft" align="right" valign="top"><a id="a0b1165ad568309eba1ccf52eff8e94aa"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nDraw::Draw</b> (const <a class="el" href="structnSXFFile_1_1rSXFFile.html">nSXFFile::rSXFFile</a> &amp;p_file)</td></tr>
+<tr class="separator:a0b1165ad568309eba1ccf52eff8e94aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Переменные</h2></td></tr>
+<tr class="memitem:ac5d2ced32eb2e76c4ebc4b4a1f1b18ec"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenDraw.html#ac5d2ced32eb2e76c4ebc4b4a1f1b18ec">nDraw::g_coords_orig</a></td></tr>
+<tr class="separator:ac5d2ced32eb2e76c4ebc4b4a1f1b18ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a251b521cab7eaf33af0e3670f1887f32"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenDraw.html#a251b521cab7eaf33af0e3670f1887f32">nDraw::g_d_meters_descrete_x</a></td></tr>
+<tr class="separator:a251b521cab7eaf33af0e3670f1887f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6532d8b48c37f2ee97a4813eef5ae4b1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenDraw.html#a6532d8b48c37f2ee97a4813eef5ae4b1">nDraw::g_d_meters_descrete_y</a></td></tr>
+<tr class="separator:a6532d8b48c37f2ee97a4813eef5ae4b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a429c350706f0d1d3e94624114f961351"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenDraw.html#a429c350706f0d1d3e94624114f961351">nDraw::g_d_pixels_meters</a></td></tr>
+<tr class="separator:a429c350706f0d1d3e94624114f961351"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbd03401c66745f16af1189853621461"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenDraw.html#abbd03401c66745f16af1189853621461">nDraw::g_l_image_size_x_pix</a></td></tr>
+<tr class="separator:abbd03401c66745f16af1189853621461"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ef21e4371bf3892fcb575c727f6b441"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenDraw.html#a8ef21e4371bf3892fcb575c727f6b441">nDraw::g_l_image_size_y_pix</a></td></tr>
+<tr class="separator:a8ef21e4371bf3892fcb575c727f6b441"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Содержит набор функций и методов для оформления данных карты на выходном изображении. </p>
+</div></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

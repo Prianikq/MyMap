@@ -1,0 +1,208 @@
+\hypertarget{namespacenDraw}{}\doxysection{Пространство имен n\+Draw}
+\label{namespacenDraw}\index{nDraw@{nDraw}}
+
+
+Содерджит необходимые процедуры и функции отрисовки.  
+
+
+\doxysubsection*{Функции}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{namespacenDraw_afab4841b3d8310ea0c3cbd163b9cfa5f}{Get\+Real\+Sizes}} (const short \&p\+\_\+s\+\_\+width, const short \&p\+\_\+s\+\_\+height, double \&p\+\_\+d\+\_\+real\+\_\+size\+\_\+x, double \&p\+\_\+d\+\_\+real\+\_\+size\+\_\+y)
+\begin{DoxyCompactList}\small\item\em Get\+Real\+Sizes -\/ вычисляет реальные размеры иконки (в пикселях), которую необходимо отрисовать. Данное преобразование необходимо для того, чтобы иконки имели возможность масштабироваться при изменении размеров выходного изображения, которые задаются в программе. \end{DoxyCompactList}\item 
+Q\+Pixmap \mbox{\hyperlink{namespacenDraw_ad0738fdbc9f9599d1c1e1fb40b5e177f}{Change\+Texture\+Sizes}} (const Q\+Pixmap \&p\+\_\+icon, const double \&p\+\_\+d\+\_\+real\+\_\+size\+\_\+x, const double \&p\+\_\+d\+\_\+real\+\_\+size\+\_\+y)
+\begin{DoxyCompactList}\small\item\em Change\+Texture\+Sizes -\/ производит машстабирование текстуры, которая будет накладываться на некоторый площадной объект. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class T $>$ }\\Q\+PointF \mbox{\hyperlink{namespacenDraw_ad517345ede189fe3f316f113c7f6e6d9}{From\+Map\+Point\+To\+Window\+PointF}} (const T \&p\+\_\+coords\+\_\+input)
+\begin{DoxyCompactList}\small\item\em From\+Map\+Point\+To\+Window\+PointF -\/ выполняет преобразование координат точки из условной системы карты в пиксельную изображения. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacenDraw_aa47a6c192ffbeb1adcbb35ec8dc681c4}\label{namespacenDraw_aa47a6c192ffbeb1adcbb35ec8dc681c4}} 
+Q\+Point {\bfseries From\+Map\+Point\+To\+Window\+Point} (const Q\+Point \&p\+\_\+coords\+\_\+input)
+\item 
+\mbox{\Hypertarget{namespacenDraw_aa1154583aca20aee3225c31848e1ef0e}\label{namespacenDraw_aa1154583aca20aee3225c31848e1ef0e}} 
+Q\+Vector$<$ Q\+PointF $>$ {\bfseries Get\+Metric\+Points} (const \mbox{\hyperlink{structnSXFFile_1_1rRecord}{n\+S\+X\+F\+File\+::r\+Record}} \&p\+\_\+record)
+\item 
+\mbox{\Hypertarget{namespacenDraw_a1d75f14dbd2f98da8c848a087c613cd3}\label{namespacenDraw_a1d75f14dbd2f98da8c848a087c613cd3}} 
+void {\bfseries Draw\+Point\+Object} (const \mbox{\hyperlink{structnSXFFile_1_1rRecord}{n\+S\+X\+F\+File\+::r\+Record}} \&p\+\_\+record, Q\+Painter \&p\+\_\+painter)
+\item 
+\mbox{\Hypertarget{namespacenDraw_ad618fc6808c6667f4440932fb3c1af9d}\label{namespacenDraw_ad618fc6808c6667f4440932fb3c1af9d}} 
+void {\bfseries Draw\+Square\+Object\+With\+Icons} (const short \&p\+\_\+s\+\_\+width, const short \&p\+\_\+s\+\_\+height, const \mbox{\hyperlink{structnSXFFile_1_1rRecord}{n\+S\+X\+F\+File\+::r\+Record}} \&p\+\_\+record, Q\+Painter \&p\+\_\+painter)
+\item 
+\mbox{\Hypertarget{namespacenDraw_a4026d656dd1d3601c37869150b2ef594}\label{namespacenDraw_a4026d656dd1d3601c37869150b2ef594}} 
+bool {\bfseries Search\+In\+Group\+Codes} (const int32\+\_\+t $\ast$p\+\_\+pl\+\_\+array, const int32\+\_\+t \&p\+\_\+l\+\_\+array\+\_\+size, const int32\+\_\+t \&p\+\_\+l\+\_\+code)
+\item 
+\mbox{\Hypertarget{namespacenDraw_ad141c4e6a4916519bc4d48147828e01d}\label{namespacenDraw_ad141c4e6a4916519bc4d48147828e01d}} 
+const \mbox{\hyperlink{structnSXFFile_1_1rSemantic}{n\+S\+X\+F\+File\+::r\+Semantic}} {\bfseries Get\+Semantic\+Value} (const \mbox{\hyperlink{structnSXFFile_1_1rRecord}{n\+S\+X\+F\+File\+::r\+Record}} \&p\+\_\+record, const short \&p\+\_\+s\+\_\+semantic\+\_\+code)
+\item 
+\mbox{\Hypertarget{namespacenDraw_a51e26ce6f6fefba76afc9e086562e0e5}\label{namespacenDraw_a51e26ce6f6fefba76afc9e086562e0e5}} 
+void {\bfseries Draw\+Vegitation} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_ab38dc49bdfac1550e015b9ee18478528}\label{namespacenDraw_ab38dc49bdfac1550e015b9ee18478528}} 
+void {\bfseries Draw\+Land\+Relief} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_ad39e068f1f6f8b6f09785d425623ad5f}\label{namespacenDraw_ad39e068f1f6f8b6f09785d425623ad5f}} 
+void {\bfseries Draw\+Soils\+And\+Lava\+Sheets} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_a7ce37b47da08056404bfe2de24c26702}\label{namespacenDraw_a7ce37b47da08056404bfe2de24c26702}} 
+void {\bfseries Draw\+Hydrography} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_ac3268b71e9a656708ff14ea5b21c68ce}\label{namespacenDraw_ac3268b71e9a656708ff14ea5b21c68ce}} 
+void {\bfseries Draw\+Vegitation\+Filled} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_afb758f65726a2eb44f97d7b55e700924}\label{namespacenDraw_afb758f65726a2eb44f97d7b55e700924}} 
+void {\bfseries Draw\+Settlements} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_af0033e3c25199a80b9e60c7ea2115df6}\label{namespacenDraw_af0033e3c25199a80b9e60c7ea2115df6}} 
+void {\bfseries Draw\+Relief\+Of\+Hydrography} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_a5d197e66dc6fdf41ac1255128be0cdfe}\label{namespacenDraw_a5d197e66dc6fdf41ac1255128be0cdfe}} 
+void {\bfseries Draw\+Hydraulic\+Structures} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_a4c97264ab1c560491abd44850bf5d8f5}\label{namespacenDraw_a4c97264ab1c560491abd44850bf5d8f5}} 
+void {\bfseries Draw\+Filling\+And\+Cutting} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_aacf9367aed079086dca1a4bd19154f19}\label{namespacenDraw_aacf9367aed079086dca1a4bd19154f19}} 
+void {\bfseries Draw\+Road\+Network} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_a97afa4dc1bb08f0cf98a33b04c0407f7}\label{namespacenDraw_a97afa4dc1bb08f0cf98a33b04c0407f7}} 
+void {\bfseries Draw\+Road\+Structures} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_a148aa00d15bea04733afd3675401173b}\label{namespacenDraw_a148aa00d15bea04733afd3675401173b}} 
+void {\bfseries Draw\+Settlements\+Quarters} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_af4d71e296ca0c1d0fe1e2d3b4523febb}\label{namespacenDraw_af4d71e296ca0c1d0fe1e2d3b4523febb}} 
+void {\bfseries Draw\+Industrial\+Social\+Facilities} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_a7560c7674bd3a0792d26127467cccae4}\label{namespacenDraw_a7560c7674bd3a0792d26127467cccae4}} 
+void {\bfseries Draw\+Planned\+High\+Rise\+Basis} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_ae518c14f5e5c785802c8ce284327ee1a}\label{namespacenDraw_ae518c14f5e5c785802c8ce284327ee1a}} 
+void {\bfseries Draw\+Borders\+And\+Fences} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_a517a9f9ce81b3812f684a1664e28288f}\label{namespacenDraw_a517a9f9ce81b3812f684a1664e28288f}} 
+void {\bfseries Draw\+Titles\+And\+Signatures} (Q\+Painter \&p\+\_\+painter, const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\item 
+\mbox{\Hypertarget{namespacenDraw_a0b1165ad568309eba1ccf52eff8e94aa}\label{namespacenDraw_a0b1165ad568309eba1ccf52eff8e94aa}} 
+void {\bfseries Draw} (const \mbox{\hyperlink{structnSXFFile_1_1rSXFFile}{n\+S\+X\+F\+File\+::r\+S\+X\+F\+File}} \&p\+\_\+file)
+\end{DoxyCompactItemize}
+\doxysubsection*{Переменные}
+\begin{DoxyCompactItemize}
+\item 
+Q\+Point \mbox{\hyperlink{namespacenDraw_ac5d2ced32eb2e76c4ebc4b4a1f1b18ec}{g\+\_\+coords\+\_\+orig}}
+\item 
+double \mbox{\hyperlink{namespacenDraw_a251b521cab7eaf33af0e3670f1887f32}{g\+\_\+d\+\_\+meters\+\_\+descrete\+\_\+x}}
+\item 
+double \mbox{\hyperlink{namespacenDraw_a6532d8b48c37f2ee97a4813eef5ae4b1}{g\+\_\+d\+\_\+meters\+\_\+descrete\+\_\+y}}
+\item 
+double \mbox{\hyperlink{namespacenDraw_a429c350706f0d1d3e94624114f961351}{g\+\_\+d\+\_\+pixels\+\_\+meters}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{namespacenDraw_abbd03401c66745f16af1189853621461}{g\+\_\+l\+\_\+image\+\_\+size\+\_\+x\+\_\+pix}}
+\item 
+int32\+\_\+t \mbox{\hyperlink{namespacenDraw_a8ef21e4371bf3892fcb575c727f6b441}{g\+\_\+l\+\_\+image\+\_\+size\+\_\+y\+\_\+pix}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Подробное описание}
+Содерджит необходимые процедуры и функции отрисовки. 
+
+\doxysubsection{Функции}
+\mbox{\Hypertarget{namespacenDraw_ad0738fdbc9f9599d1c1e1fb40b5e177f}\label{namespacenDraw_ad0738fdbc9f9599d1c1e1fb40b5e177f}} 
+\index{nDraw@{nDraw}!ChangeTextureSizes@{ChangeTextureSizes}}
+\index{ChangeTextureSizes@{ChangeTextureSizes}!nDraw@{nDraw}}
+\doxysubsubsection{\texorpdfstring{ChangeTextureSizes()}{ChangeTextureSizes()}}
+{\footnotesize\ttfamily Q\+Pixmap n\+Draw\+::\+Change\+Texture\+Sizes (\begin{DoxyParamCaption}\item[{const Q\+Pixmap \&}]{p\+\_\+icon,  }\item[{const double \&}]{p\+\_\+d\+\_\+real\+\_\+size\+\_\+x,  }\item[{const double \&}]{p\+\_\+d\+\_\+real\+\_\+size\+\_\+y }\end{DoxyParamCaption})}
+
+
+
+Change\+Texture\+Sizes -\/ производит машстабирование текстуры, которая будет накладываться на некоторый площадной объект. 
+
+
+\begin{DoxyParams}{Аргументы}
+{\em p\+\_\+icon} & -\/ первоначальный объект неотмасшатбированной текстуры. \\
+\hline
+{\em p\+\_\+d\+\_\+real\+\_\+size\+\_\+x} & -\/ ширина иконки (в пикселях), которая заполняет данную текстуру. \\
+\hline
+{\em p\+\_\+d\+\_\+real\+\_\+size\+\_\+y} & -\/ высота иконки (в пикселях), которая заполняет данную текстуру. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Возвращает}
+объект Q\+Pixmap, представляющий отмасшатбированную текстуру. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacenDraw_ad517345ede189fe3f316f113c7f6e6d9}\label{namespacenDraw_ad517345ede189fe3f316f113c7f6e6d9}} 
+\index{nDraw@{nDraw}!FromMapPointToWindowPointF@{FromMapPointToWindowPointF}}
+\index{FromMapPointToWindowPointF@{FromMapPointToWindowPointF}!nDraw@{nDraw}}
+\doxysubsubsection{\texorpdfstring{FromMapPointToWindowPointF()}{FromMapPointToWindowPointF()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+Q\+PointF n\+Draw\+::\+From\+Map\+Point\+To\+Window\+PointF (\begin{DoxyParamCaption}\item[{const T \&}]{p\+\_\+coords\+\_\+input }\end{DoxyParamCaption})}
+
+
+
+From\+Map\+Point\+To\+Window\+PointF -\/ выполняет преобразование координат точки из условной системы карты в пиксельную изображения. 
+
+
+\begin{DoxyParams}{Аргументы}
+{\em p\+\_\+coords\+\_\+input} & -\/ некоторый объект, представляющий точку в условной системе координат. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Возвращает}
+объект Q\+PointF, представляющий точку с пиксельными координатами. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacenDraw_afab4841b3d8310ea0c3cbd163b9cfa5f}\label{namespacenDraw_afab4841b3d8310ea0c3cbd163b9cfa5f}} 
+\index{nDraw@{nDraw}!GetRealSizes@{GetRealSizes}}
+\index{GetRealSizes@{GetRealSizes}!nDraw@{nDraw}}
+\doxysubsubsection{\texorpdfstring{GetRealSizes()}{GetRealSizes()}}
+{\footnotesize\ttfamily void n\+Draw\+::\+Get\+Real\+Sizes (\begin{DoxyParamCaption}\item[{const short \&}]{p\+\_\+s\+\_\+width,  }\item[{const short \&}]{p\+\_\+s\+\_\+height,  }\item[{double \&}]{p\+\_\+d\+\_\+real\+\_\+size\+\_\+x,  }\item[{double \&}]{p\+\_\+d\+\_\+real\+\_\+size\+\_\+y }\end{DoxyParamCaption})}
+
+
+
+Get\+Real\+Sizes -\/ вычисляет реальные размеры иконки (в пикселях), которую необходимо отрисовать. Данное преобразование необходимо для того, чтобы иконки имели возможность масштабироваться при изменении размеров выходного изображения, которые задаются в программе. 
+
+
+\begin{DoxyParams}{Аргументы}
+{\em p\+\_\+s\+\_\+width} & -\/ хранит первоначальную ширину иконки в пикселях. \\
+\hline
+{\em p\+\_\+s\+\_\+height} & -\/ хранит первоначальную высоту иконки в пикселях. \\
+\hline
+{\em p\+\_\+d\+\_\+real\+\_\+size\+\_\+x} & -\/ хранит результат преобразования ширины иконки в пикселях. \\
+\hline
+{\em p\+\_\+d\+\_\+real\+\_\+size\+\_\+y} & -\/ хранит результат преобразования высоты иконки в пикселях. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Переменные}
+\mbox{\Hypertarget{namespacenDraw_ac5d2ced32eb2e76c4ebc4b4a1f1b18ec}\label{namespacenDraw_ac5d2ced32eb2e76c4ebc4b4a1f1b18ec}} 
+\index{nDraw@{nDraw}!g\_coords\_orig@{g\_coords\_orig}}
+\index{g\_coords\_orig@{g\_coords\_orig}!nDraw@{nDraw}}
+\doxysubsubsection{\texorpdfstring{g\_coords\_orig}{g\_coords\_orig}}
+{\footnotesize\ttfamily Q\+Point n\+Draw\+::g\+\_\+coords\+\_\+orig}
+
+Условные координаты левого верхнего угла окна. \mbox{\Hypertarget{namespacenDraw_a251b521cab7eaf33af0e3670f1887f32}\label{namespacenDraw_a251b521cab7eaf33af0e3670f1887f32}} 
+\index{nDraw@{nDraw}!g\_d\_meters\_descrete\_x@{g\_d\_meters\_descrete\_x}}
+\index{g\_d\_meters\_descrete\_x@{g\_d\_meters\_descrete\_x}!nDraw@{nDraw}}
+\doxysubsubsection{\texorpdfstring{g\_d\_meters\_descrete\_x}{g\_d\_meters\_descrete\_x}}
+{\footnotesize\ttfamily double n\+Draw\+::g\+\_\+d\+\_\+meters\+\_\+descrete\+\_\+x}
+
+Определяет значение по X координате, сколько метров содержится в 1 дискрете. \mbox{\Hypertarget{namespacenDraw_a6532d8b48c37f2ee97a4813eef5ae4b1}\label{namespacenDraw_a6532d8b48c37f2ee97a4813eef5ae4b1}} 
+\index{nDraw@{nDraw}!g\_d\_meters\_descrete\_y@{g\_d\_meters\_descrete\_y}}
+\index{g\_d\_meters\_descrete\_y@{g\_d\_meters\_descrete\_y}!nDraw@{nDraw}}
+\doxysubsubsection{\texorpdfstring{g\_d\_meters\_descrete\_y}{g\_d\_meters\_descrete\_y}}
+{\footnotesize\ttfamily double n\+Draw\+::g\+\_\+d\+\_\+meters\+\_\+descrete\+\_\+y}
+
+Определяет значение по Y координате, сколько метров содержится в 1 дискрете. \mbox{\Hypertarget{namespacenDraw_a429c350706f0d1d3e94624114f961351}\label{namespacenDraw_a429c350706f0d1d3e94624114f961351}} 
+\index{nDraw@{nDraw}!g\_d\_pixels\_meters@{g\_d\_pixels\_meters}}
+\index{g\_d\_pixels\_meters@{g\_d\_pixels\_meters}!nDraw@{nDraw}}
+\doxysubsubsection{\texorpdfstring{g\_d\_pixels\_meters}{g\_d\_pixels\_meters}}
+{\footnotesize\ttfamily double n\+Draw\+::g\+\_\+d\+\_\+pixels\+\_\+meters}
+
+Определяет значение, сколько метров в 1 пикселе. \mbox{\Hypertarget{namespacenDraw_abbd03401c66745f16af1189853621461}\label{namespacenDraw_abbd03401c66745f16af1189853621461}} 
+\index{nDraw@{nDraw}!g\_l\_image\_size\_x\_pix@{g\_l\_image\_size\_x\_pix}}
+\index{g\_l\_image\_size\_x\_pix@{g\_l\_image\_size\_x\_pix}!nDraw@{nDraw}}
+\doxysubsubsection{\texorpdfstring{g\_l\_image\_size\_x\_pix}{g\_l\_image\_size\_x\_pix}}
+{\footnotesize\ttfamily int32\+\_\+t n\+Draw\+::g\+\_\+l\+\_\+image\+\_\+size\+\_\+x\+\_\+pix}
+
+Размеры в пикселях выходного изображения (ширина). \mbox{\Hypertarget{namespacenDraw_a8ef21e4371bf3892fcb575c727f6b441}\label{namespacenDraw_a8ef21e4371bf3892fcb575c727f6b441}} 
+\index{nDraw@{nDraw}!g\_l\_image\_size\_y\_pix@{g\_l\_image\_size\_y\_pix}}
+\index{g\_l\_image\_size\_y\_pix@{g\_l\_image\_size\_y\_pix}!nDraw@{nDraw}}
+\doxysubsubsection{\texorpdfstring{g\_l\_image\_size\_y\_pix}{g\_l\_image\_size\_y\_pix}}
+{\footnotesize\ttfamily int32\+\_\+t n\+Draw\+::g\+\_\+l\+\_\+image\+\_\+size\+\_\+y\+\_\+pix}
+
+Размеры в пикселях выходного изображение (высота). 

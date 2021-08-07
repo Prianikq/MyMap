@@ -3,15 +3,29 @@
 #include <QImage>
 #include <QPainter>
 
+/*! \file drawfunctions.hpp
+    \brief Содержит набор функций и методов для оформления данных карты на выходном изображении.
+ */
+
+/*! \brief Содерджит необходимые процедуры и функции отрисовки.
+ */
 namespace nDraw {
-    QPoint g_coords_orig; // Условные координаты левого верхнего угла окна
-    double g_d_meters_descrete_x; // Определяет значение, сколько метров содержится в 1 дискрете (по X и Y координате отдельно)
-    double g_d_meters_descrete_y;
-    double g_d_pixels_meters; // Определяет значение, сколько метров в 1 пикселе
+    QPoint g_coords_orig; /*!< Условные координаты левого верхнего угла окна. */
+    double g_d_meters_descrete_x; /*!< Определяет значение по X координате, сколько метров содержится в 1 дискрете. */
+    double g_d_meters_descrete_y; /*!< Определяет значение по Y координате, сколько метров содержится в 1 дискрете. */
+    double g_d_pixels_meters; /*!< Определяет значение, сколько метров в 1 пикселе. */
 
-    int32_t g_l_image_size_x_pix; // Размеры в пикселях выходного изображения
-    int32_t g_l_image_size_y_pix;
+    int32_t g_l_image_size_x_pix; /*!< Размеры в пикселях выходного изображения (ширина). */
+    int32_t g_l_image_size_y_pix; /*!< Размеры в пикселях выходного изображение (высота). */
 
+    /*!
+     * \brief GetRealSizes - вычисляет реальные размеры иконки (в пикселях), которую необходимо отрисовать.
+     * Данное преобразование необходимо для того, чтобы иконки имели возможность масштабироваться при изменении размеров выходного изображения, которые задаются в программе.
+     * \param p_s_width - хранит первоначальную ширину иконки в пикселях.
+     * \param p_s_height - хранит первоначальную высоту иконки в пикселях.
+     * \param p_d_real_size_x - хранит результат преобразования ширины иконки в пикселях.
+     * \param p_d_real_size_y - хранит результат преобразования высоты иконки в пикселях.
+     */
     void GetRealSizes(const short& p_s_width, const short& p_s_height, double& p_d_real_size_x, double& p_d_real_size_y) { // Функция, вычисляющая реальные размеры иконок
         /* Константы линейных функций для получения размера иконки по разрешению экрана (выводились экспериментально - по анализу изменения размера некоторой иконки) */
         static const double K_X = 12.0 / 3168.0; // <размер иконки по x> = K_X * <размер изображения по x> + B_X
@@ -34,6 +48,14 @@ namespace nDraw {
             p_d_real_size_y = p_s_height;
         }
     }
+
+    /*!
+     * \brief ChangeTextureSizes - производит машстабирование текстуры, которая будет накладываться на некоторый площадной объект.
+     * \param p_icon - первоначальный объект неотмасшатбированной текстуры.
+     * \param p_d_real_size_x - ширина иконки (в пикселях), которая заполняет данную текстуру.
+     * \param p_d_real_size_y - высота иконки (в пикселях), которая заполняет данную текстуру.
+     * \return объект QPixmap, представляющий отмасшатбированную текстуру.
+     */
     QPixmap ChangeTextureSizes(const QPixmap& p_icon, const double& p_d_real_size_x, const double& p_d_real_size_y) {
         /* Постоянные линейных функций зависимости размера текстуры от размера значка (для отрисовки площадных объектов заполненных значками) */
         static const double K_X = 10;
@@ -47,6 +69,11 @@ namespace nDraw {
         return result;
     }
 
+    /*!
+     * \brief FromMapPointToWindowPointF - выполняет преобразование координат точки из условной системы карты в пиксельную изображения.
+     * \param p_coords_input - некоторый объект, представляющий точку в условной системе координат.
+     * \return объект QPointF, представляющий точку с пиксельными координатами.
+     */
     template<class T>
     QPointF FromMapPointToWindowPointF(const T& p_coords_input) {
         double x = (1.0 * g_coords_orig.x() - p_coords_input.x()) * g_d_meters_descrete_x / g_d_pixels_meters;
@@ -90,7 +117,7 @@ namespace nDraw {
 
     void DrawPointObject(const nSXFFile::rRecord& p_record, QPainter& p_painter) {
         double real_size_x, real_size_y;
-        QPixmap image("images/" + QString::number(p_record.m_title.m_l_classification_code) + ".png");
+        QPixmap image("images/point objects/" + QString::number(p_record.m_title.m_l_classification_code) + ".png");
         GetRealSizes(image.width(), image.height(), real_size_x, real_size_y);
         p_painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
         QVector<QPointF> points = GetMetricPoints(p_record);
@@ -100,7 +127,7 @@ namespace nDraw {
     void DrawSquareObjectWithIcons(const short& p_s_width, const short& p_s_height, const nSXFFile::rRecord& p_record, QPainter& p_painter) {
         double real_size_x, real_size_y;
         GetRealSizes(p_s_width, p_s_height, real_size_x, real_size_y);
-        QPixmap icon("images/" + QString::number(p_record.m_title.m_l_classification_code) + ".png");
+        QPixmap icon("images/areal objects/" + QString::number(p_record.m_title.m_l_classification_code) + ".png");
         //std::cout << "BEFORE: " << icon.width() << " " << icon.height() << std::endl;
         icon = ChangeTextureSizes(icon, real_size_x, real_size_y);
         //std::cout << "AFTER: " << icon.width() << " " << icon.height() << std::endl;
@@ -380,6 +407,7 @@ namespace nDraw {
         static const int32_t POINT_OBJECTS_CODES[POINT_CODES_COUNT] = {31510000, 31531000};
         /* Коды площадных объектов */
         static const int32_t SHALLOWS_CODE = 31211000;
+        static const int32_t REED_VEGITATION_CODE = 71311000;
 
         for (int32_t i = 0; i < p_file.m_descriptor.m_l_number_records; ++i) {
             if (p_file.m_records[i].m_title.LocalizationType() == nSXFFile::LINEAR) {
@@ -407,6 +435,12 @@ namespace nDraw {
                     p_painter.setBrush(QBrush(Qt::black, Qt::Dense6Pattern));
                     QVector<QPointF> points = GetMetricPoints(p_file.m_records[i]);
                     p_painter.drawPolygon(points.data(), points.size());
+                }
+                else if (p_file.m_records[i].m_title.m_l_classification_code == REED_VEGITATION_CODE) {
+                    static const int32_t WIDTH = 5;
+                    static const int32_t HEIGHT = 4;
+                    p_painter.setPen(Qt::NoPen);
+                    DrawSquareObjectWithIcons(WIDTH, HEIGHT, p_file.m_records[i], p_painter);
                 }
             }
         }
@@ -554,6 +588,17 @@ namespace nDraw {
         /* Коды точечных объектов */
         static const int32_t POINT_CODES_COUNT = 14;
         static const int32_t POINT_OBJECTS_CODES[POINT_CODES_COUNT] = {51130000, 51230000, 51410000, 51420000, 51460000, 51470000, 51500000, 52100000, 53180000, 53340000, 53420000, 53510000, 53530000, 53600000 };
+        /* Коды площадных объектов */
+        static const int32_t AREAL_CODES_COUNT = 6;
+        static const int32_t QUARRIES_CODE = 51111000;
+        static const int32_t INDUSTRIAL_FACILITIES_CODE = 51130000;
+        static const int32_t TERRITORY_INDUSTR_FACIL_CODE = 51130001;
+        static const int32_t SEDIM_TANKS_CODE = 51480000;
+        static const int32_t AGRICULTURAL_ENTERP_CODE = 52100000;
+        static const int32_t CEMETERY_CODE = 53510000;
+        static const int32_t AREAL_OBJECTS_CODES[AREAL_CODES_COUNT] = {QUARRIES_CODE, INDUSTRIAL_FACILITIES_CODE, TERRITORY_INDUSTR_FACIL_CODE, SEDIM_TANKS_CODE, AGRICULTURAL_ENTERP_CODE, CEMETERY_CODE};
+        /*Коды линейных объектов */
+        static const int32_t GAS_PIPELINE_CODE = 51310000;
 
         for (int32_t i = 0; i < p_file.m_descriptor.m_l_number_records; ++i) {
             if (p_file.m_records[i].m_title.LocalizationType() == nSXFFile::POINT) {
@@ -561,6 +606,42 @@ namespace nDraw {
                     continue;
                 }
                 DrawPointObject(p_file.m_records[i], p_painter);
+            }
+            if (p_file.m_records[i].m_title.LocalizationType() == nSXFFile::AREAL) {
+                if (!SearchInGroupCodes(AREAL_OBJECTS_CODES, AREAL_CODES_COUNT, p_file.m_records[i].m_title.m_l_classification_code)) {
+                    continue;
+                }
+                QVector<QPointF> points = GetMetricPoints(p_file.m_records[i]);
+                if (p_file.m_records[i].m_title.m_l_classification_code == QUARRIES_CODE) {
+                    p_painter.setPen(QPen(QColor(180, 136, 60), 0.5, Qt::SolidLine));
+                    p_painter.setBrush(Qt::NoBrush);
+                    p_painter.drawPolygon(points);
+                    p_painter.setPen(QPen(QColor(180, 136, 60), 1, Qt::DotLine));
+                }
+                else if (p_file.m_records[i].m_title.m_l_classification_code == INDUSTRIAL_FACILITIES_CODE) {
+                    p_painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+                    p_painter.setBrush(QBrush(Qt::black, Qt::SolidPattern));
+                }
+                else if (p_file.m_records[i].m_title.m_l_classification_code == TERRITORY_INDUSTR_FACIL_CODE) {
+                    p_painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+                    p_painter.setBrush(QBrush(Qt::NoBrush));
+                }
+                else if (p_file.m_records[i].m_title.m_l_classification_code == SEDIM_TANKS_CODE) {
+                    p_painter.setPen(QPen(QColor(0, 191, 255), 1, Qt::SolidLine));
+                    p_painter.setBrush(QBrush(QColor(0, 191, 255), Qt::SolidPattern));
+                }
+                else if (p_file.m_records[i].m_title.m_l_classification_code == AGRICULTURAL_ENTERP_CODE) {
+                    p_painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+                    p_painter.setBrush(QBrush(Qt::black, Qt::SolidPattern));
+                }
+                else if (p_file.m_records[i].m_title.m_l_classification_code == CEMETERY_CODE) {
+                    static const short WIDTH = 5;
+                    static const short HEIGHT = 5;
+                    p_painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+                    DrawSquareObjectWithIcons(WIDTH, HEIGHT, p_file.m_records[i], p_painter);
+                    continue;
+                }
+                p_painter.drawPolygon(points);
             }
         }
     }

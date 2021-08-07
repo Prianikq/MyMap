@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Отрисовка топографической карты SXF: Исходный файл rrecord.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Отрисовка топографической карты SXF
+   </div>
+   <div id="projectbrief">Программа парсинга данных топографической карты формата SXF и её отрисовки.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">rrecord.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>nSXFFile {</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    <span class="keyword">enum</span> eLocalType { LINEAR = 0, AREAL, POINT, SIGNATURE, VECTOR, SIGNATURE_TEMPLATE};</div>
+<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="structnSXFFile_1_1rRecordTitle.html">    7</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structnSXFFile_1_1rRecordTitle.html">rRecordTitle</a> {</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;        int32_t m_l_identifier;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        int32_t m_l_length_record;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        int32_t m_l_length_metric;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        int32_t m_l_classification_code;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        int32_t m_l_object_number;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        uint32_t m_ul_reference_data;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        int32_t m_l_count_metric_points;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> m_as_metric_descriptor[2];</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keywordtype">void</span> Print() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordtype">bool</span> HasBigMetricSize() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keywordtype">bool</span> HasDoubleMetricType() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keywordtype">bool</span> Has3DPresentation() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordtype">bool</span> HasGraphicDescription() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordtype">bool</span> HasAnchorVector() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordtype">bool</span> HasSemantics() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keywordtype">bool</span> HasMetricText() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keywordtype">short</span> LocalizationType() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        int32_t GetSemanticLength() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    };</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">enum</span> eSemanticDataType { ASCIIZ = 0, CHAR = 1, SHORT = 2, LONG = 4, DOUBLE = 8, ANSI = 126, UNICODE = 127 };</div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="unionnSXFFile_1_1rData.html">   28</a></span>&#160;    <span class="keyword">union </span><a class="code" href="unionnSXFFile_1_1rData.html">rData</a> {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">short</span> STRING_SIZE = 256;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordtype">char</span> m_c_char;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keywordtype">short</span> m_s_short;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        int32_t m_l_long;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordtype">double</span> m_d_double;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordtype">char</span> m_ac_ansi[STRING_SIZE];</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    };</div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="structnSXFFile_1_1rSemantic.html">   36</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structnSXFFile_1_1rSemantic.html">rSemantic</a> {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        eSemanticDataType m_type;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="code" href="unionnSXFFile_1_1rData.html">rData</a> m_data;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordtype">char</span> m_c_scale_factor;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordtype">short</span> m_s_semantic_code;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    };</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="structnSXFFile_1_1rRecord.html">   43</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structnSXFFile_1_1rRecord.html">rRecord</a> {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="structnSXFFile_1_1rRecordTitle.html">rRecordTitle</a> m_title;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">void</span>* m_p_points;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">char</span>* m_p_str_text; <span class="comment">// Текст подписи (если имеется)</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        std::vector&lt;rSemantic&gt; m_semantics;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">char</span>* m_p_subobjects; <span class="comment">// Считывается целиком, в данной версии программы не обрабатывается</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">void</span> Print();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="code" href="structnSXFFile_1_1rRecord.html">rRecord</a>();</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        ~<a class="code" href="structnSXFFile_1_1rRecord.html">rRecord</a>();</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    };</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;}</div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aunionnSXFFile_1_1rData_html"><div class="ttname"><a href="unionnSXFFile_1_1rData.html">nSXFFile::rData</a></div><div class="ttdef"><b>Definition:</b> rrecord.h:28</div></div>
+<div class="ttc" id="astructnSXFFile_1_1rRecord_html"><div class="ttname"><a href="structnSXFFile_1_1rRecord.html">nSXFFile::rRecord</a></div><div class="ttdef"><b>Definition:</b> rrecord.h:43</div></div>
+<div class="ttc" id="astructnSXFFile_1_1rRecordTitle_html"><div class="ttname"><a href="structnSXFFile_1_1rRecordTitle.html">nSXFFile::rRecordTitle</a></div><div class="ttdef"><b>Definition:</b> rrecord.h:7</div></div>
+<div class="ttc" id="astructnSXFFile_1_1rSemantic_html"><div class="ttname"><a href="structnSXFFile_1_1rSemantic.html">nSXFFile::rSemantic</a></div><div class="ttdef"><b>Definition:</b> rrecord.h:36</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

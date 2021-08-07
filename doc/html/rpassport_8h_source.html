@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Отрисовка топографической карты SXF: Исходный файл rpassport.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Отрисовка топографической карты SXF
+   </div>
+   <div id="projectbrief">Программа парсинга данных топографической карты формата SXF и её отрисовки.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">rpassport.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">namespace </span>nSXFFile {</div>
+<div class="line"><a name="l00004"></a><span class="lineno"><a class="line" href="structnSXFFile_1_1rRectang__coord2D.html">    4</a></span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt; <span class="keyword">struct </span><a class="code" href="structnSXFFile_1_1rRectang__coord2D.html">rRectang_coord2D</a> {</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;        T m_x;</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;        T m_y;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;        <span class="keywordtype">void</span> Print() {</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;             std::cout &lt;&lt; <span class="stringliteral">&quot;X = &quot;</span> &lt;&lt; std::dec &lt;&lt; this-&gt;m_x &lt;&lt; <span class="stringliteral">&quot;   Y = &quot;</span> &lt;&lt; std::dec &lt;&lt; this-&gt;m_y &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        }</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    };</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="structnSXFFile_1_1rRectang__coord3D.html">   12</a></span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt; <span class="keyword">struct </span><a class="code" href="structnSXFFile_1_1rRectang__coord3D.html">rRectang_coord3D</a> {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        T m_x;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        T m_y;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        T m_z;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="comment">// void Print();</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    };</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="structnSXFFile_1_1rGeo__coord.html">   19</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structnSXFFile_1_1rGeo__coord.html">rGeo_coord</a> {</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordtype">double</span> m_d_b;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordtype">double</span> m_d_l;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordtype">void</span> Print() {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;B = &quot;</span> &lt;&lt; this-&gt;m_d_b &lt;&lt; <span class="stringliteral">&quot;   L = &quot;</span> &lt;&lt; this-&gt;m_d_l &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        }</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    };</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="structnSXFFile_1_1rRectang__coord__of__corners.html">   28</a></span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt; <span class="keyword">struct </span><a class="code" href="structnSXFFile_1_1rRectang__coord__of__corners.html">rRectang_coord_of_corners</a> {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <a class="code" href="structnSXFFile_1_1rRectang__coord2D.html">rRectang_coord2D&lt;T&gt;</a> m_southwest;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <a class="code" href="structnSXFFile_1_1rRectang__coord2D.html">rRectang_coord2D&lt;T&gt;</a> m_northwest;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <a class="code" href="structnSXFFile_1_1rRectang__coord2D.html">rRectang_coord2D&lt;T&gt;</a> m_northeast;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <a class="code" href="structnSXFFile_1_1rRectang__coord2D.html">rRectang_coord2D&lt;T&gt;</a> m_southeast;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    };</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="structnSXFFile_1_1rGeo__coord__of__corners.html">   34</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structnSXFFile_1_1rGeo__coord__of__corners.html">rGeo_coord_of_corners</a> {</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <a class="code" href="structnSXFFile_1_1rGeo__coord.html">rGeo_coord</a> m_southwest;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="code" href="structnSXFFile_1_1rGeo__coord.html">rGeo_coord</a> m_northwest;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <a class="code" href="structnSXFFile_1_1rGeo__coord.html">rGeo_coord</a> m_northeast;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="code" href="structnSXFFile_1_1rGeo__coord.html">rGeo_coord</a> m_southeast;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    };</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="structnSXFFile_1_1rSource__material__ref.html">   41</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structnSXFFile_1_1rSource__material__ref.html">rSource_material_ref</a> {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="comment">// ДОПИСАТЬ?????</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    };</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="structnSXFFile_1_1rSource__material__proj.html">   45</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structnSXFFile_1_1rSource__material__proj.html">rSource_material_proj</a> {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="comment">// ДОПИСАТЬ?????</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    };</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="structnSXFFile_1_1rPassport.html">   49</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structnSXFFile_1_1rPassport.html">rPassport</a> {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        int32_t m_l_identifier;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        int32_t m_l_length_record;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        int32_t m_l_edition;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        int32_t m_l_checksum;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordtype">char</span> m_ac_date_creation[12];</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordtype">char</span> m_ac_nomenclature[32];</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        int32_t m_l_scale;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">char</span> m_ac_map_name[32];</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        uint32_t m_ul_information_flags;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        int32_t m_l_classifier_code;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="structnSXFFile_1_1rRectang__coord__of__corners.html">rRectang_coord_of_corners&lt;double&gt;</a> m_rectang_coords;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <a class="code" href="structnSXFFile_1_1rGeo__coord__of__corners.html">rGeo_coord_of_corners</a> m_geo_coords;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordtype">char</span> m_ac_mathematical_basis[8];</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordtype">char</span> m_ac_source_material_ref[64];</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordtype">double</span> m_d_reserve;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        int32_t m_l_instrument_resolution;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="code" href="structnSXFFile_1_1rRectang__coord__of__corners.html">rRectang_coord_of_corners&lt;int32_t&gt;</a> m_frame_coordinates;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        int32_t m_l_frame_code;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordtype">char</span> m_ac_source_material_proj[48];</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordtype">void</span> Print();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    };</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="astructnSXFFile_1_1rRectang__coord3D_html"><div class="ttname"><a href="structnSXFFile_1_1rRectang__coord3D.html">nSXFFile::rRectang_coord3D</a></div><div class="ttdef"><b>Definition:</b> rpassport.h:12</div></div>
+<div class="ttc" id="astructnSXFFile_1_1rPassport_html"><div class="ttname"><a href="structnSXFFile_1_1rPassport.html">nSXFFile::rPassport</a></div><div class="ttdef"><b>Definition:</b> rpassport.h:49</div></div>
+<div class="ttc" id="astructnSXFFile_1_1rRectang__coord__of__corners_html"><div class="ttname"><a href="structnSXFFile_1_1rRectang__coord__of__corners.html">nSXFFile::rRectang_coord_of_corners</a></div><div class="ttdef"><b>Definition:</b> rpassport.h:28</div></div>
+<div class="ttc" id="astructnSXFFile_1_1rGeo__coord_html"><div class="ttname"><a href="structnSXFFile_1_1rGeo__coord.html">nSXFFile::rGeo_coord</a></div><div class="ttdef"><b>Definition:</b> rpassport.h:19</div></div>
+<div class="ttc" id="astructnSXFFile_1_1rSource__material__ref_html"><div class="ttname"><a href="structnSXFFile_1_1rSource__material__ref.html">nSXFFile::rSource_material_ref</a></div><div class="ttdef"><b>Definition:</b> rpassport.h:41</div></div>
+<div class="ttc" id="astructnSXFFile_1_1rSource__material__proj_html"><div class="ttname"><a href="structnSXFFile_1_1rSource__material__proj.html">nSXFFile::rSource_material_proj</a></div><div class="ttdef"><b>Definition:</b> rpassport.h:45</div></div>
+<div class="ttc" id="astructnSXFFile_1_1rRectang__coord2D_html"><div class="ttname"><a href="structnSXFFile_1_1rRectang__coord2D.html">nSXFFile::rRectang_coord2D</a></div><div class="ttdef"><b>Definition:</b> rpassport.h:4</div></div>
+<div class="ttc" id="astructnSXFFile_1_1rGeo__coord__of__corners_html"><div class="ttname"><a href="structnSXFFile_1_1rGeo__coord__of__corners.html">nSXFFile::rGeo_coord_of_corners</a></div><div class="ttdef"><b>Definition:</b> rpassport.h:34</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>
